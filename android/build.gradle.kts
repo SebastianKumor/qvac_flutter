@@ -1,3 +1,6 @@
+import java.net.URI
+import java.security.MessageDigest
+
 group = "tech.velorion.qvac_flutter"
 version = "1.0-SNAPSHOT"
 
@@ -62,8 +65,38 @@ kotlin {
     }
 }
 
+// Native binaries: a local build from tool/worker if there is one, else the GitHub release.
+// Set qvacBinariesUrl in gradle.properties to fetch the release zip from somewhere else.
+val nativeDir: File = if (file("src/main/jniLibs").isDirectory) projectDir else fetchRelease()
+
+fun fetchRelease(): File {
+    @Suppress("UNCHECKED_CAST")
+    val release = groovy.json.JsonSlurper().parse(file("release.json")) as Map<String, String>
+    val sha256 = release.getValue("sha256")
+    val dir = layout.buildDirectory.dir("qvac-binaries/$sha256").get().asFile
+    if (File(dir, "libs/bare-kit.jar").isFile) return dir
+    val url = (findProperty("qvacBinariesUrl") as String?) ?: release.getValue("url")
+    val zip = File(dir.parentFile, "$sha256.zip")
+    zip.parentFile.mkdirs()
+    logger.lifecycle("qvac_flutter: downloading native binaries from $url")
+    URI(url).toURL().openStream().use { input -> zip.outputStream().use { input.copyTo(it) } }
+    val actual = MessageDigest.getInstance("SHA-256").digest(zip.readBytes())
+        .joinToString("") { "%02x".format(it) }
+    if (actual != sha256) {
+        zip.delete()
+        throw GradleException("qvac_flutter: $url has SHA-256 $actual, expected $sha256")
+    }
+    copy {
+        from(zipTree(zip))
+        into(dir)
+    }
+    zip.delete()
+    return dir
+}
+
+android.sourceSets.getByName("main").jniLibs.srcDir(File(nativeDir, "src/main/jniLibs"))
+
 dependencies {
-    // BareKit's Java classes. Its .so files and the worker sit in src/main/jniLibs and assets,
-    // put there by tool/worker (npm run build).
-    implementation(files("libs/bare-kit.jar"))
+    // BareKit's Java classes. The worker bundle itself ships in src/main/assets.
+    implementation(files(File(nativeDir, "libs/bare-kit.jar")))
 }

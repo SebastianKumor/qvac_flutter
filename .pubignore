@@ -1,0 +1,27 @@
+# pub uses this instead of .gitignore. Same rules, except the worker bundles ship
+# in the package; the large native binaries come from the GitHub release.
+.DS_Store
+.dart_tool/
+.idea/
+*.iml
+.build/
+.swiftpm/
+/pubspec.lock
+/build/
+**/doc/api/
+.flutter-plugins-dependencies
+
+/ios/qvac_flutter/Frameworks/
+/android/src/main/jniLibs/
+/android/libs/
+/android/.gradle/
+/android/local.properties
+
+/example/build/
+/example/.dart_tool/
+/example/ios/Flutter/ephemeral/
+/example/android/.gradle/
+/example/assets/sample_fi.pcm
+
+/tool/
+/test/interop_test.dart

@@ -3,17 +3,31 @@
 import Foundation
 import PackageDescription
 
-// BareKit and the worker's native addons, put here by tool/worker (npm run build).
-// The worker loads each addon by framework name, so all of them get embedded.
-let frameworksDir = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
-    .appendingPathComponent("Frameworks")
-let frameworks = ((try? FileManager.default.contentsOfDirectory(atPath: frameworksDir.path)) ?? [])
+// BareKit and the worker's native addons. The worker loads each addon by framework
+// name, so all of them get embedded. Local builds from tool/worker win over the release.
+let here = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+let localDir = here.appendingPathComponent("Frameworks")
+
+struct Release: Decodable {
+    let file: String
+    let url: String
+    let checksum: String
+}
+
+func targetName(_ file: String) -> String {
+    String(String(file.dropLast(".xcframework".count)).map { $0.isLetter || $0.isNumber ? $0 : "_" })
+}
+
+let local = ((try? FileManager.default.contentsOfDirectory(atPath: localDir.path)) ?? [])
     .filter { $0.hasSuffix(".xcframework") }
     .sorted()
-let binaries: [Target] = frameworks.map { file in
-    let name = String(file.dropLast(".xcframework".count))
-        .map { $0.isLetter || $0.isNumber ? $0 : "_" }
-    return .binaryTarget(name: String(name), path: "Frameworks/\(file)")
+let binaries: [Target]
+if !local.isEmpty {
+    binaries = local.map { .binaryTarget(name: targetName($0), path: "Frameworks/\($0)") }
+} else {
+    let data = (try? Data(contentsOf: here.appendingPathComponent("release.json"))) ?? Data("[]".utf8)
+    let release = (try? JSONDecoder().decode([Release].self, from: data)) ?? []
+    binaries = release.map { .binaryTarget(name: targetName($0.file), url: $0.url, checksum: $0.checksum) }
 }
 
 let package = Package(
