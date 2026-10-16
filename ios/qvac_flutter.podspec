@@ -1,7 +1,7 @@
 # qvac_flutter ships its iOS binaries as Swift Package Manager binary targets only.
 Pod::Spec.new do |s|
   s.name     = 'qvac_flutter'
-  s.version  = '0.1.0'
+  s.version  = '0.1.1'
   s.summary  = 'Unofficial Flutter plugin for QVAC on-device speech to text.'
   s.homepage = 'https://github.com/SebastianKumor/qvac_flutter'
   s.license  = { :file => '../LICENSE' }

@@ -42,6 +42,10 @@ Start QVAC once per app. A second `Qvac.start` throws until you `close` the
 first. After a hot restart, `Qvac.start` stops the old worker and starts a new
 one.
 
+An idle worker uses no CPU, so there is nothing to pause when the app goes to
+the background. Work that is running, like a model download or a
+transcription, keeps going until it finishes or the OS suspends the app.
+
 `transcribe` takes an optional `timeout`. When it runs out, the transcription is
 cancelled on the worker too. `Whisper.cancel()` stops every running
 transcription on that model.

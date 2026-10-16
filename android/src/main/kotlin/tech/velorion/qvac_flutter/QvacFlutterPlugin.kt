@@ -13,6 +13,7 @@ import to.holepunch.bare.kit.IPC
 import to.holepunch.bare.kit.Worklet
 import java.io.File
 import java.nio.ByteBuffer
+import java.util.concurrent.Executors
 
 /** Runs the QVAC worker in a BareKit worklet and passes its IPC bytes to Dart. */
 class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventChannel.StreamHandler {
@@ -20,6 +21,9 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
     private lateinit var events: EventChannel
     private lateinit var context: Context
     private val main = Handler(Looper.getMainLooper())
+    private val background = Executors.newSingleThreadExecutor()
+    private var starting = false
+    private var attached = false
 
     private var worklet: Worklet? = null
     private var ipc: IPC? = null
@@ -31,6 +35,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         context = binding.applicationContext
+        attached = true
         methods = MethodChannel(binding.binaryMessenger, "qvac_flutter")
         methods.setMethodCallHandler(this)
         events = EventChannel(binding.binaryMessenger, "qvac_flutter/ipc")
@@ -38,6 +43,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        attached = false
         stop()
         methods.setMethodCallHandler(null)
         events.setStreamHandler(null)
@@ -45,12 +51,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
-            // Throwable: a missing native library is an Error, not an Exception.
-            "start" -> try {
-                result.success(start(call.argument<String>("homeDir")))
-            } catch (e: Throwable) {
-                result.error("start_failed", e.message ?: e.toString(), null)
-            }
+            "start" -> start(call.argument<String>("homeDir"), result)
             "write" -> {
                 val bytes = call.arguments as? ByteArray
                     ?: return result.error("bad_args", "write needs bytes", null)
@@ -66,12 +67,38 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
         }
     }
 
-    private fun start(homeDir: String?): String {
+    private fun start(homeDir: String?, result: MethodChannel.Result) {
         // Left over from before a hot restart. Dart shuts it down and starts again.
         if (worklet != null) {
             early.clear()
-            return "running"
+            return result.success("running")
         }
+        if (starting) return result.error("start_failed", "The worker is already starting", null)
+        starting = true
+        // Reading the bundle and starting the worklet takes long enough to drop frames.
+        background.execute {
+            val outcome = runCatching { launch(homeDir) }
+            main.post {
+                starting = false
+                outcome.fold(
+                    onSuccess = { worklet ->
+                        if (!attached) {
+                            worklet.terminate()
+                            return@fold
+                        }
+                        this.worklet = worklet
+                        ipc = IPC(worklet)
+                        read()
+                        result.success("started")
+                    },
+                    // Throwable: a missing native library is an Error, not an Exception.
+                    onFailure = { e -> result.error("start_failed", e.message ?: e.toString(), null) },
+                )
+            }
+        }
+    }
+
+    private fun launch(homeDir: String?): Worklet {
         check("arm64-v8a" in Build.SUPPORTED_ABIS) {
             "qvac_flutter only runs on arm64-v8a. This device supports ${Build.SUPPORTED_ABIS.joinToString()}."
         }
@@ -86,10 +113,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
             worklet.terminate()
             throw e
         }
-        this.worklet = worklet
-        ipc = IPC(worklet)
-        read()
-        return "started"
+        return worklet
     }
 
     private fun read() {
