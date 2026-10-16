@@ -43,3 +43,4 @@ migrate_working_dir/
 /qvac_release_*.tgz
 /upload.sh
 /v0.1.0/
+/binaries-*/
