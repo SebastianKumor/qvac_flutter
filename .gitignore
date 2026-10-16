@@ -38,3 +38,8 @@ migrate_working_dir/
 /android/src/main/jniLibs/
 /android/src/main/assets/worker.bundle
 /android/libs/
+
+# Release archive for moving binaries to another machine.
+/qvac_release_*.tgz
+/upload.sh
+/v0.1.0/

@@ -25,3 +25,8 @@
 
 /tool/
 /test/interop_test.dart
+
+# Release archive for moving binaries to another machine.
+/qvac_release_*.tgz
+/upload.sh
+/v0.1.0/
