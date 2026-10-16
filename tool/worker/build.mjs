@@ -7,6 +7,7 @@ import { existsSync } from 'node:fs'
 import path from 'node:path'
 import link from 'bare-link'
 import { bundleSdk } from '@qvac/sdk/commands'
+import { writePackageSwift } from './package_swift.mjs'
 
 const root = import.meta.dirname
 const plugin = path.resolve(root, '../..')
@@ -83,7 +84,8 @@ if (onMac) {
   const resources = path.join(ios, 'Sources', 'qvac_flutter', 'Resources')
   await mkdir(resources, { recursive: true })
   await writeFile(path.join(resources, 'worker.bundle'), bundle)
-  console.log(`iOS: ${(await readdir(frameworks)).length} frameworks in ${path.relative(plugin, frameworks)}`)
+  await writePackageSwift('local')
+  console.log(`iOS: ${(await readdir(frameworks)).length} frameworks in ${path.relative(plugin, frameworks)}. Package.swift now uses them; release.mjs switches it back.`)
 }
 
 const android = path.join(plugin, 'android')

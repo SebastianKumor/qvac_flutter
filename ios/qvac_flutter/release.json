@@ -2,171 +2,171 @@
   {
     "file": "BareKit.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/BareKit.xcframework.zip",
-    "checksum": "66bd7a3cc1e35ed60680a4d2a5adb708278f32dee1b105edaf05254dd798b313"
+    "checksum": "22ba51cc7b176b2c1311082c423b4bbad657e00445a0adb9a1996cd144f7990e"
   },
   {
     "file": "bare-abort.2.0.13.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-abort.2.0.13.xcframework.zip",
-    "checksum": "260256899803671909a56deccebb012af35fceff2cd1437d5e195f4a9f82c751"
+    "checksum": "b7980363566b28648bd53fa4ceaf9057b8299931283bdc2ee6bea769a6104373"
   },
   {
     "file": "bare-buffer.3.7.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-buffer.3.7.1.xcframework.zip",
-    "checksum": "cfb2a5f9947070571a3c6e5a301c853d9ae9a94bc4d0abb1ebc5199576b5e2d9"
+    "checksum": "7cc2e42de8be6af92f5faf698841287ddbca4297923e1146d64942d4272a4f1c"
   },
   {
     "file": "bare-cpu-info.0.1.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-cpu-info.0.1.1.xcframework.zip",
-    "checksum": "8719176678f76dc9c0fe91c8e20ee239ce4c2dea2b49c53ac2e1f16fc8e1b668"
+    "checksum": "274518ef3a9c3b1eb19b7448cad539cf642eabe7043431a4dfbce1e69791f310"
   },
   {
     "file": "bare-crypto.1.15.4.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-crypto.1.15.4.xcframework.zip",
-    "checksum": "8ef537aef53244f00bc5289f79b979999d6a853604713da2450263074ada67d0"
+    "checksum": "65f2ffdf5ce9da954626d3bc28a7e0f3e08c4e1dbc63faf8d4068c005368cc57"
   },
   {
     "file": "bare-dns.2.3.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-dns.2.3.0.xcframework.zip",
-    "checksum": "f3f2bccbc6c6c749c7e113ee4bb96a96967a2e98b20c545360130a28e18d2087"
+    "checksum": "48a21bd65661d9971e221034c2dd0f6b0d319fbb8bc5b3d4ed9a889d438f1c5b"
   },
   {
     "file": "bare-fs.4.8.4.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-fs.4.8.4.xcframework.zip",
-    "checksum": "76732102f5a2e459778e6c99a6d6c2a8ab38e9ed63ddcdc00a5fe6fd735e76d1"
+    "checksum": "c36f32f271663d57d6fb4734f6288319b24545d9c25c2e2918adc3c637a23008"
   },
   {
     "file": "bare-gpu-info.0.1.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-gpu-info.0.1.1.xcframework.zip",
-    "checksum": "6f3b5c5b8e9600552e4282d557abfb8055ff113cdf58d821b2d5800e8334e6cd"
+    "checksum": "0b3801629697f7edb76b5190eda734385577938835cd0129a3c2639a08ec5e06"
   },
   {
     "file": "bare-hrtime.2.1.2.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-hrtime.2.1.2.xcframework.zip",
-    "checksum": "bdb730a7ba6727c58e416d8a2914f82f66ef1c3a845d519f246632809f003121"
+    "checksum": "72cf54edb0baf2a6d3d0795760731b73205c58424c9313cc9ae3184c333da8ff"
   },
   {
     "file": "bare-inspect.3.1.10.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-inspect.3.1.10.xcframework.zip",
-    "checksum": "6a3f81e7d949c59965b07c448b641e00a3b807691692c8f00b18f67de0fd5d17"
+    "checksum": "035b7c1ee84fdd4574839b5a4aff33c204d28f16733b05c3cfbbb8120a752a46"
   },
   {
     "file": "bare-os.3.9.3.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-os.3.9.3.xcframework.zip",
-    "checksum": "f98588fcb1e42dfa4a02599046b1a6b96ee5692caec8823fded3bba27bbd489a"
+    "checksum": "cf480c145aa60490d15d2700203be12a1c63b3588bc64455adc7b22cef7d18c0"
   },
   {
     "file": "bare-path.3.1.2.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-path.3.1.2.xcframework.zip",
-    "checksum": "0583f34e90ba84373f9503c95c97fbd465e30917ba1381defafc318db8e669bf"
+    "checksum": "2ce0df4186bb0d251f33cd783a00eaa1c475c5ff8c446e8d45202435e97edb84"
   },
   {
     "file": "bare-performance.2.1.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-performance.2.1.1.xcframework.zip",
-    "checksum": "93b48498dbd7114c3aef01fe333ca6b35900506105906796f37b1073e1e9f62f"
+    "checksum": "bf4a6c390e18d72728f98b83dfbd0b749d21a8290ecdaf377862abcfde1892cf"
   },
   {
     "file": "bare-pipe.4.3.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-pipe.4.3.1.xcframework.zip",
-    "checksum": "68f5fcacd597e0b8ce4f24c77a0aa82298f64eabd09bb2ae1c62750370b76f9a"
+    "checksum": "b63c0211ec5d9b51bb73079ac37f43dc1110c2386f3bb6136136aca5132be399"
   },
   {
     "file": "bare-posix.1.0.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-posix.1.0.1.xcframework.zip",
-    "checksum": "5fdff68561736aa4f7887ce25807a5658dff1ab228cf24455ee7ea98183b4712"
+    "checksum": "1ced0b7f3822a477e4ddd7e5bd44455a46ff00763096cd7d9600e810a26ecd48"
   },
   {
     "file": "bare-signals.4.2.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-signals.4.2.0.xcframework.zip",
-    "checksum": "07a522156dcfe119e6413c0f9d24b7ae5703b781f4e2b6c6cf252c82801f63a3"
+    "checksum": "4aa80fe2a47d0b901202e100f38236404ebebc8158310a8d0a12c8b15d5e6409"
   },
   {
     "file": "bare-signals.5.0.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-signals.5.0.0.xcframework.zip",
-    "checksum": "468d13025bf1bec3519957e77bd00dce4c0149e0a95b060d267effadc0a66e5f"
+    "checksum": "5cb299b4d6b26a6b1b18f91d0ac9fffd0a5216b5ddfc81046bc5b4c4dafcb905"
   },
   {
     "file": "bare-stdio.1.0.3.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-stdio.1.0.3.xcframework.zip",
-    "checksum": "2ccc0c899d9d6cf201a9a1ba5b79bd58794fe69262adacd887609ae1bae9bd06"
+    "checksum": "c76d659780189f02606e3ab651b5b92873313569e6568951c38d173c32d39e17"
   },
   {
     "file": "bare-structured-clone.2.0.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-structured-clone.2.0.1.xcframework.zip",
-    "checksum": "827ff4b1a2027547650fdaa8cf04dfd6494e668ee4d2f62137dbd8b62bb85508"
+    "checksum": "f879873c11702d49ac1d8361c622fb2715d6e967c77586a5218644b783a60b51"
   },
   {
     "file": "bare-subprocess.6.2.2.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-subprocess.6.2.2.xcframework.zip",
-    "checksum": "acb1a43268ad516937e7ff8df40053d07c70115c36cca9e4dd02ae89da7a67f6"
+    "checksum": "6963a7e72b40f67a8a1c642dd5a52e47ac8776620f3be410952052349512ff6e"
   },
   {
     "file": "bare-tcp.2.6.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tcp.2.6.1.xcframework.zip",
-    "checksum": "fa7b300988463433527d07a57d35fb4f45209da5560df59da2a51c969a485434"
+    "checksum": "7366f32da8a01ee4a58110bc85fa4f96a0fc8e35091f7093944555e6866dea1b"
   },
   {
     "file": "bare-tls.3.1.11.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tls.3.1.11.xcframework.zip",
-    "checksum": "60efaa78c3ba3d3e9b7271daa4496c411b10650c624456802435d604e176fc65"
+    "checksum": "e46126ded287672c7f5c27b24c4a7227f3de62f0bc4e55a543597805d18ca1fc"
   },
   {
     "file": "bare-tty.5.2.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tty.5.2.1.xcframework.zip",
-    "checksum": "510aab6d297beff07db4d4885a9d08ef13ca0786052eea10317b3dafcc82088e"
+    "checksum": "60239bb8be5f2ae6a6932e900d168d7cd3306a47d14e62e4fedb64edc1103a2c"
   },
   {
     "file": "bare-type.1.4.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-type.1.4.0.xcframework.zip",
-    "checksum": "5085333ebd5673afefeff1442e3388e002131263a7482ff16f48427e5717deab"
+    "checksum": "7d309f973b53227feee3b7e0a6d553b44e964f63cbdadcf1ab6ec24f9f55002a"
   },
   {
     "file": "bare-url.2.5.5.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-url.2.5.5.xcframework.zip",
-    "checksum": "e9c7da4b057dd94f578e116320a857ec845a8ba97171f79a0cb6da8b2cd87b14"
+    "checksum": "18d13959ef0ddf68bd0644c17e19133fe44dd12851514f8396388f2961cdca00"
   },
   {
     "file": "bare-zlib.1.4.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-zlib.1.4.1.xcframework.zip",
-    "checksum": "cdb19e33a4a2c3f642dc5dbfe1b2e005461e9109e3a320e70ff4c763a9adb521"
+    "checksum": "dd54228c60024db0a9aa14e0e3c879496900ede259c1241018c3831473ae6fcd"
   },
   {
     "file": "fs-native-extensions.1.5.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/fs-native-extensions.1.5.1.xcframework.zip",
-    "checksum": "e368917cc014b93fcd882706511bd0c713897a56554e52df2669504b3c39fa2b"
+    "checksum": "8afc76d1a338bab56c0cb197c975374c4ba8d32008b820a82c021f3d75c4bab3"
   },
   {
     "file": "quickbit-native.2.4.9.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/quickbit-native.2.4.9.xcframework.zip",
-    "checksum": "6f8942567453ecf57521ffc4bef15296bebdb8987f04f2205f6c9317cf733e7e"
+    "checksum": "0948250cb659a0f7daa6414b51dde614556f27ba1f90bda52a5ba1527a2d0a6d"
   },
   {
     "file": "qvac__asr-ggml.0.7.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/qvac__asr-ggml.0.7.0.xcframework.zip",
-    "checksum": "79530a2df0e03d7479f769ce86f80bdaedc9d6c6e26513061d1e69944a9faf29"
+    "checksum": "bd7320395533f9192990cefe91df0de6d402773d159ea0f82153e8d655c5624d"
   },
   {
     "file": "rabin-native.2.0.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/rabin-native.2.0.0.xcframework.zip",
-    "checksum": "14f17c359ea75ea103335279444d63e7788a2441535664d1e3a20010b3e73721"
+    "checksum": "2701be30e59f8cd2064dc464619d054a88c8672a91a9aa94341e48cba3501e55"
   },
   {
     "file": "rocksdb-native.3.19.1.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/rocksdb-native.3.19.1.xcframework.zip",
-    "checksum": "aff742da2b2b3fa991861349ca691e274bacfdef73084ab59f2ce05458ff9322"
+    "checksum": "3ba92d8410b29dab6fe84b14dd6feaaac3f91e4b5d111590311c9f2fdfb96243"
   },
   {
     "file": "simdle-native.1.3.9.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/simdle-native.1.3.9.xcframework.zip",
-    "checksum": "7d09ba81c67b166ede7dd1cc422dbf5384ff27ac324e0c64ad188f9ad150d4dd"
+    "checksum": "98e773173e3578e9999fb83e70f34ee964e107f8b1a4a3a4639209e3751565f7"
   },
   {
     "file": "sodium-native.5.1.0.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/sodium-native.5.1.0.xcframework.zip",
-    "checksum": "17d4455aea847f5008d802b27aad280478bdaac72ca8745bdd7964290794ee43"
+    "checksum": "1a60fc738a8ba6bdb9c50f71b95de389b5c5ec4164fdd95b23ca2d57e87a6043"
   },
   {
     "file": "udx-native.1.21.3.xcframework",
     "url": "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/udx-native.1.21.3.xcframework.zip",
-    "checksum": "aed2a0abd74e8067ddf9bb266fe48a447a6b98f79c6ec2d91091a2d8061cdeca"
+    "checksum": "0c9b7ae2af8f58c3566b08c5666195046c92665a616a5b6285f79762ddb00b03"
   }
 ]
