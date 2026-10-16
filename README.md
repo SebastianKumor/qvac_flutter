@@ -34,8 +34,17 @@ final text = await whisper.transcribe(pcm);
 await qvac.close();
 ```
 
-The worker downloads the model on the first `loadWhisper` and keeps it in the
-app's documents folder, so later loads are fast and offline.
+The worker downloads the model on the first `loadWhisper` and keeps it, so
+later loads are fast and offline. The default folder is left out of iCloud and
+Android backups. Model URLs must be HTTPS.
+
+Start QVAC once per app. A second `Qvac.start` throws until you `close` the
+first. After a hot restart, `Qvac.start` stops the old worker and starts a new
+one.
+
+`transcribe` takes an optional `timeout`. When it runs out, the transcription is
+cancelled on the worker too. `Whisper.cancel()` stops every running
+transcription on that model.
 
 ## Picking a model
 
@@ -62,7 +71,21 @@ of silence in front to stop that. Without it, `small` lost the first word on
 | --- | --- | --- |
 | Minimum | iOS 15 | API 24 |
 | CPU | arm64 devices and arm64 simulators | arm64-v8a |
-| Size added to the app | about 53 MB | about 70 MB before compression |
+| Size added to the app | about 55 MB | about 130 MB before compression |
+
+Flutter 3.44 or newer. On iOS the plugin only works through Swift Package
+Manager, which you may need to turn on:
+
+```sh
+flutter config --enable-swift-package-manager
+```
+
+There is no x86_64 code, so Intel Mac simulators, x86_64 Android emulators and
+32-bit Android phones are not supported. On those, `Qvac.start` throws.
+
+On Android the build downloads the native binaries (about 40 MB) once from this
+package's GitHub release and caches them in the Gradle home folder. To use a
+mirror, set `qvacBinariesUrl` in `gradle.properties`.
 
 Both platforms pass the example's integration test, which starts the worker,
 downloads Whisper base and transcribes a Finnish clip.

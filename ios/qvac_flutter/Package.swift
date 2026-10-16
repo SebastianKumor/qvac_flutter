@@ -63,172 +63,172 @@ let package = Package(
         ),
         .binaryTarget(
             name: "BareKit",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/BareKit.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/BareKit.xcframework.zip",
             checksum: "22ba51cc7b176b2c1311082c423b4bbad657e00445a0adb9a1996cd144f7990e"
         ),
         .binaryTarget(
             name: "bare_abort_2_0_13",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-abort.2.0.13.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-abort.2.0.13.xcframework.zip",
             checksum: "b7980363566b28648bd53fa4ceaf9057b8299931283bdc2ee6bea769a6104373"
         ),
         .binaryTarget(
             name: "bare_buffer_3_7_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-buffer.3.7.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-buffer.3.7.1.xcframework.zip",
             checksum: "7cc2e42de8be6af92f5faf698841287ddbca4297923e1146d64942d4272a4f1c"
         ),
         .binaryTarget(
             name: "bare_cpu_info_0_1_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-cpu-info.0.1.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-cpu-info.0.1.1.xcframework.zip",
             checksum: "274518ef3a9c3b1eb19b7448cad539cf642eabe7043431a4dfbce1e69791f310"
         ),
         .binaryTarget(
             name: "bare_crypto_1_15_4",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-crypto.1.15.4.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-crypto.1.15.4.xcframework.zip",
             checksum: "65f2ffdf5ce9da954626d3bc28a7e0f3e08c4e1dbc63faf8d4068c005368cc57"
         ),
         .binaryTarget(
             name: "bare_dns_2_3_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-dns.2.3.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-dns.2.3.0.xcframework.zip",
             checksum: "48a21bd65661d9971e221034c2dd0f6b0d319fbb8bc5b3d4ed9a889d438f1c5b"
         ),
         .binaryTarget(
             name: "bare_fs_4_8_4",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-fs.4.8.4.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-fs.4.8.4.xcframework.zip",
             checksum: "c36f32f271663d57d6fb4734f6288319b24545d9c25c2e2918adc3c637a23008"
         ),
         .binaryTarget(
             name: "bare_gpu_info_0_1_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-gpu-info.0.1.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-gpu-info.0.1.1.xcframework.zip",
             checksum: "0b3801629697f7edb76b5190eda734385577938835cd0129a3c2639a08ec5e06"
         ),
         .binaryTarget(
             name: "bare_hrtime_2_1_2",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-hrtime.2.1.2.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-hrtime.2.1.2.xcframework.zip",
             checksum: "72cf54edb0baf2a6d3d0795760731b73205c58424c9313cc9ae3184c333da8ff"
         ),
         .binaryTarget(
             name: "bare_inspect_3_1_10",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-inspect.3.1.10.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-inspect.3.1.10.xcframework.zip",
             checksum: "035b7c1ee84fdd4574839b5a4aff33c204d28f16733b05c3cfbbb8120a752a46"
         ),
         .binaryTarget(
             name: "bare_os_3_9_3",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-os.3.9.3.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-os.3.9.3.xcframework.zip",
             checksum: "cf480c145aa60490d15d2700203be12a1c63b3588bc64455adc7b22cef7d18c0"
         ),
         .binaryTarget(
             name: "bare_path_3_1_2",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-path.3.1.2.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-path.3.1.2.xcframework.zip",
             checksum: "2ce0df4186bb0d251f33cd783a00eaa1c475c5ff8c446e8d45202435e97edb84"
         ),
         .binaryTarget(
             name: "bare_performance_2_1_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-performance.2.1.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-performance.2.1.1.xcframework.zip",
             checksum: "bf4a6c390e18d72728f98b83dfbd0b749d21a8290ecdaf377862abcfde1892cf"
         ),
         .binaryTarget(
             name: "bare_pipe_4_3_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-pipe.4.3.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-pipe.4.3.1.xcframework.zip",
             checksum: "b63c0211ec5d9b51bb73079ac37f43dc1110c2386f3bb6136136aca5132be399"
         ),
         .binaryTarget(
             name: "bare_posix_1_0_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-posix.1.0.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-posix.1.0.1.xcframework.zip",
             checksum: "1ced0b7f3822a477e4ddd7e5bd44455a46ff00763096cd7d9600e810a26ecd48"
         ),
         .binaryTarget(
             name: "bare_signals_4_2_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-signals.4.2.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-signals.4.2.0.xcframework.zip",
             checksum: "4aa80fe2a47d0b901202e100f38236404ebebc8158310a8d0a12c8b15d5e6409"
         ),
         .binaryTarget(
             name: "bare_signals_5_0_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-signals.5.0.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-signals.5.0.0.xcframework.zip",
             checksum: "5cb299b4d6b26a6b1b18f91d0ac9fffd0a5216b5ddfc81046bc5b4c4dafcb905"
         ),
         .binaryTarget(
             name: "bare_stdio_1_0_3",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-stdio.1.0.3.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-stdio.1.0.3.xcframework.zip",
             checksum: "c76d659780189f02606e3ab651b5b92873313569e6568951c38d173c32d39e17"
         ),
         .binaryTarget(
             name: "bare_structured_clone_2_0_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-structured-clone.2.0.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-structured-clone.2.0.1.xcframework.zip",
             checksum: "f879873c11702d49ac1d8361c622fb2715d6e967c77586a5218644b783a60b51"
         ),
         .binaryTarget(
             name: "bare_subprocess_6_2_2",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-subprocess.6.2.2.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-subprocess.6.2.2.xcframework.zip",
             checksum: "6963a7e72b40f67a8a1c642dd5a52e47ac8776620f3be410952052349512ff6e"
         ),
         .binaryTarget(
             name: "bare_tcp_2_6_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tcp.2.6.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-tcp.2.6.1.xcframework.zip",
             checksum: "7366f32da8a01ee4a58110bc85fa4f96a0fc8e35091f7093944555e6866dea1b"
         ),
         .binaryTarget(
             name: "bare_tls_3_1_11",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tls.3.1.11.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-tls.3.1.11.xcframework.zip",
             checksum: "e46126ded287672c7f5c27b24c4a7227f3de62f0bc4e55a543597805d18ca1fc"
         ),
         .binaryTarget(
             name: "bare_tty_5_2_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-tty.5.2.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-tty.5.2.1.xcframework.zip",
             checksum: "60239bb8be5f2ae6a6932e900d168d7cd3306a47d14e62e4fedb64edc1103a2c"
         ),
         .binaryTarget(
             name: "bare_type_1_4_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-type.1.4.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-type.1.4.0.xcframework.zip",
             checksum: "7d309f973b53227feee3b7e0a6d553b44e964f63cbdadcf1ab6ec24f9f55002a"
         ),
         .binaryTarget(
             name: "bare_url_2_5_5",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-url.2.5.5.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-url.2.5.5.xcframework.zip",
             checksum: "18d13959ef0ddf68bd0644c17e19133fe44dd12851514f8396388f2961cdca00"
         ),
         .binaryTarget(
             name: "bare_zlib_1_4_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/bare-zlib.1.4.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/bare-zlib.1.4.1.xcframework.zip",
             checksum: "dd54228c60024db0a9aa14e0e3c879496900ede259c1241018c3831473ae6fcd"
         ),
         .binaryTarget(
             name: "fs_native_extensions_1_5_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/fs-native-extensions.1.5.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/fs-native-extensions.1.5.1.xcframework.zip",
             checksum: "8afc76d1a338bab56c0cb197c975374c4ba8d32008b820a82c021f3d75c4bab3"
         ),
         .binaryTarget(
             name: "quickbit_native_2_4_9",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/quickbit-native.2.4.9.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/quickbit-native.2.4.9.xcframework.zip",
             checksum: "0948250cb659a0f7daa6414b51dde614556f27ba1f90bda52a5ba1527a2d0a6d"
         ),
         .binaryTarget(
             name: "qvac__asr_ggml_0_7_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/qvac__asr-ggml.0.7.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/qvac__asr-ggml.0.7.0.xcframework.zip",
             checksum: "bd7320395533f9192990cefe91df0de6d402773d159ea0f82153e8d655c5624d"
         ),
         .binaryTarget(
             name: "rabin_native_2_0_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/rabin-native.2.0.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/rabin-native.2.0.0.xcframework.zip",
             checksum: "2701be30e59f8cd2064dc464619d054a88c8672a91a9aa94341e48cba3501e55"
         ),
         .binaryTarget(
             name: "rocksdb_native_3_19_1",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/rocksdb-native.3.19.1.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/rocksdb-native.3.19.1.xcframework.zip",
             checksum: "3ba92d8410b29dab6fe84b14dd6feaaac3f91e4b5d111590311c9f2fdfb96243"
         ),
         .binaryTarget(
             name: "simdle_native_1_3_9",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/simdle-native.1.3.9.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/simdle-native.1.3.9.xcframework.zip",
             checksum: "98e773173e3578e9999fb83e70f34ee964e107f8b1a4a3a4639209e3751565f7"
         ),
         .binaryTarget(
             name: "sodium_native_5_1_0",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/sodium-native.5.1.0.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/sodium-native.5.1.0.xcframework.zip",
             checksum: "1a60fc738a8ba6bdb9c50f71b95de389b5c5ec4164fdd95b23ca2d57e87a6043"
         ),
         .binaryTarget(
             name: "udx_native_1_21_3",
-            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/v0.1.0/udx-native.1.21.3.xcframework.zip",
+            url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/binaries-1/udx-native.1.21.3.xcframework.zip",
             checksum: "0c9b7ae2af8f58c3566b08c5666195046c92665a616a5b6285f79762ddb00b03"
         ),
     ]

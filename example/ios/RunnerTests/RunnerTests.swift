@@ -7,23 +7,23 @@ import XCTest
 
 @testable import qvac_flutter
 
-// This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
-//
-// See https://developer.apple.com/documentation/xctest for more information about using XCTest.
-
 class RunnerTests: XCTestCase {
 
-  func testGetPlatformVersion() {
-    let plugin = QvacFlutterPlugin()
-
-    let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
-
-    let resultExpectation = expectation(description: "result block must be called.")
-    plugin.handle(call) { result in
-      XCTAssertEqual(result as! String, "iOS " + UIDevice.current.systemVersion)
-      resultExpectation.fulfill()
+  func testUnknownMethodIsNotImplemented() {
+    let done = expectation(description: "result")
+    QvacFlutterPlugin().handle(FlutterMethodCall(methodName: "nope", arguments: nil)) { result in
+      XCTAssertTrue(result as AnyObject === FlutterMethodNotImplemented)
+      done.fulfill()
     }
     waitForExpectations(timeout: 1)
   }
 
+  func testWriteNeedsBytes() {
+    let done = expectation(description: "result")
+    QvacFlutterPlugin().handle(FlutterMethodCall(methodName: "write", arguments: "text")) { result in
+      XCTAssertEqual((result as? FlutterError)?.code, "bad_args")
+      done.fulfill()
+    }
+    waitForExpectations(timeout: 1)
+  }
 }

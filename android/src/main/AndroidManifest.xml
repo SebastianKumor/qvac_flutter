@@ -1,3 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="tech.velorion.qvac_flutter">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- loadWhisper downloads models. -->
+  <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -1,6 +1,7 @@
 package tech.velorion.qvac_flutter
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -10,6 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import org.json.JSONObject
 import to.holepunch.bare.kit.IPC
 import to.holepunch.bare.kit.Worklet
+import java.io.File
 import java.nio.ByteBuffer
 
 /** Runs the QVAC worker in a BareKit worklet and passes its IPC bytes to Dart. */
@@ -43,11 +45,11 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            // Throwable: a missing native library is an Error, not an Exception.
             "start" -> try {
-                start(call.argument<String>("homeDir"))
-                result.success(null)
-            } catch (e: Exception) {
-                result.error("start_failed", e.message, null)
+                result.success(start(call.argument<String>("homeDir")))
+            } catch (e: Throwable) {
+                result.error("start_failed", e.message ?: e.toString(), null)
             }
             "write" -> {
                 val bytes = call.arguments as? ByteArray
@@ -64,21 +66,30 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
         }
     }
 
-    private fun start(homeDir: String?) {
-        check(worklet == null) { "The QVAC worker is already running" }
-        val home = homeDir ?: context.filesDir.absolutePath
+    private fun start(homeDir: String?): String {
+        // Left over from before a hot restart. Dart shuts it down and starts again.
+        if (worklet != null) {
+            early.clear()
+            return "running"
+        }
+        check("arm64-v8a" in Build.SUPPORTED_ABIS) {
+            "qvac_flutter only runs on arm64-v8a. This device supports ${Build.SUPPORTED_ABIS.joinToString()}."
+        }
+        // No Auto Backup: models are big and can be downloaded again.
+        val home = homeDir ?: File(context.noBackupFilesDir, "qvac").apply { mkdirs() }.absolutePath
         val worklet = Worklet(Worklet.Options())
         try {
             // Same argument shape as QVAC's Kotlin SDK: the JSON config must be third.
             val args = arrayOf("qvac_flutter", "worker.bundle", JSONObject().put("HOME_DIR", home).toString())
             context.assets.open("worker.bundle").use { worklet.start("/worker.bundle", it, args) }
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             worklet.terminate()
             throw e
         }
         this.worklet = worklet
         ipc = IPC(worklet)
         read()
+        return "started"
     }
 
     private fun read() {
@@ -112,6 +123,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
         buffer.flip()
         current.write(buffer) { error ->
             main.post {
+                if (ipc !== current) return@post
                 writing = false
                 if (error != null) sink?.error("ipc_error", error.message, null)
                 flush()

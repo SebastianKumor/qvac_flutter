@@ -33,11 +33,17 @@ class QvacRpc {
 
   final RpcClient _rpc;
 
-  /// One request, one reply.
+  /// One request, one reply. A reply with `success: false` throws.
   Future<Map<String, dynamic>> call(String type,
       [Map<String, dynamic> args = const {}]) async {
-    final reply = await _rpc.request(_encode(type, args));
-    return _check(jsonDecode(utf8.decode(reply)));
+    final bytes = await _rpc.request(_encode(type, args));
+    final reply = _check(jsonDecode(utf8.decode(bytes)));
+    if (reply['success'] == false) {
+      throw QvacException(
+          '$type failed: ${reply['error'] ?? 'no reason given'}',
+          details: reply);
+    }
+    return reply;
   }
 
   /// One request, many replies. The worker sends one JSON object per line.

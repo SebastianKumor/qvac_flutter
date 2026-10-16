@@ -40,16 +40,20 @@ public class QvacFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     }
   }
 
-  private func start(homeDir: String?) -> FlutterError? {
+  private func start(homeDir: String?) -> Any {
+    // Left over from before a hot restart. Dart shuts it down and starts again.
     if worklet != nil {
-      return FlutterError(code: "already_started", message: "The QVAC worker is already running", details: nil)
+      early.removeAll()
+      return "running"
     }
     guard let url = Bundle.module.url(forResource: "worker", withExtension: "bundle"),
       let source = try? Data(contentsOf: url)
     else {
       return FlutterError(code: "no_bundle", message: "worker.bundle is missing. Run npm run build in tool/worker.", details: nil)
     }
-    let home = homeDir ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].path
+    guard let home = homeDir ?? defaultHome() else {
+      return FlutterError(code: "start_failed", message: "Could not create the model folder", details: nil)
+    }
     guard let config = try? JSONSerialization.data(withJSONObject: ["HOME_DIR": home]),
       let worklet = BareWorklet(configuration: nil)
     else {
@@ -60,13 +64,26 @@ public class QvacFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     self.worklet = worklet
     ipc = BareIPC(worklet: worklet)
     read()
-    return nil
+    return "started"
+  }
+
+  // Models are big and can be downloaded again, so they stay out of iCloud backups.
+  private func defaultHome() -> String? {
+    guard var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
+      .appendingPathComponent("qvac", isDirectory: true),
+      (try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)) != nil
+    else { return nil }
+    var values = URLResourceValues()
+    values.isExcludedFromBackup = true
+    try? url.setResourceValues(values)
+    return url.path
   }
 
   private func read() {
-    ipc?.read { [weak self] data, error in
+    guard let current = ipc else { return }
+    current.read { [weak self] data, error in
       DispatchQueue.main.async {
-        guard let self = self, self.ipc != nil else { return }
+        guard let self = self, self.ipc === current else { return }
         if let error = error {
           self.emit(FlutterError(code: "ipc_error", message: error.localizedDescription, details: nil))
         } else if let data = data {
@@ -98,7 +115,7 @@ public class QvacFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     writing = true
     ipc.write(outbox.removeFirst()) { [weak self] error in
       DispatchQueue.main.async {
-        guard let self = self else { return }
+        guard let self = self, self.ipc === ipc else { return }
         self.writing = false
         if let error = error {
           self.emit(FlutterError(code: "ipc_error", message: error.localizedDescription, details: nil))
@@ -117,6 +134,10 @@ public class QvacFlutterPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     outbox.removeAll()
     early.removeAll()
     writing = false
+  }
+
+  public func detachFromEngine(for registrar: FlutterPluginRegistrar) {
+    stop()
   }
 
   public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {

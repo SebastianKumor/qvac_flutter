@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
-// Runs the real QVAC worker on this computer and transcribes some clips.
-// flutter test tool/worker_check_test.dart --dart-define=SDK=<@qvac/sdk dir>
-//   --dart-define=MODEL=<ggml whisper .bin> --dart-define=CLIPS=<dir with manifest.json>
+// Transcribes clips with the real worker. Needs --dart-define SDK=<@qvac/sdk dir>,
+// MODEL=<ggml .bin> and CLIPS=<dir with manifest.json>.
 import 'dart:convert';
 import 'dart:io';
 

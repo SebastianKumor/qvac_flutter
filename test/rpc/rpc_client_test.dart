@@ -148,6 +148,33 @@ void main() {
     expect(destroy.flags, StreamFlag.response | StreamFlag.destroy);
   });
 
+  test('stream cancelled before it opens is closed once it does', () async {
+    final w = FakeWorker();
+    final sub = QvacRpc(w.client).stream('transcribe').listen((_) {});
+    final req = await w.next();
+    await sub.cancel();
+    await pumpEventQueue();
+    expect(w.sent, hasLength(1), reason: 'nothing to destroy yet');
+    w.reply(RpcResponse(req.id, stream: StreamFlag.open));
+    final open = await w.next() as RpcStreamFrame;
+    final destroy = await w.next() as RpcStreamFrame;
+    expect(open.flags, StreamFlag.response | StreamFlag.open);
+    expect(destroy.flags, StreamFlag.response | StreamFlag.destroy);
+  });
+
+  test('success: false reply throws', () async {
+    final w = FakeWorker();
+    final result = QvacRpc(w.client).call('unloadModel');
+    await w.next();
+    w.reply(RpcResponse(1,
+        data: utf8
+            .encode('{"type":"unloadModel","success":false,"error":"busy"}')));
+    await expectLater(
+        result,
+        throwsA(isA<QvacException>()
+            .having((e) => e.message, 'message', contains('busy'))));
+  });
+
   test('connection loss fails waiting calls', () async {
     final w = FakeWorker();
     final result = QvacRpc(w.client).call('heartbeat');

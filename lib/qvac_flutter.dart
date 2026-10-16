@@ -1,6 +1,7 @@
 /// Unofficial Flutter plugin for QVAC, Tether's local AI. Runs on the device.
 library;
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -32,10 +33,8 @@ class Qvac {
     return Qvac._(worker.rpc, worker.shutdown);
   }
 
-  /// Loads a whisper.cpp model for speech to text.
-  ///
-  /// [source] is a local file path or an HTTPS URL to a ggml `.bin` model.
-  /// [language] is an ISO 639-1 code such as `fi`, or `auto`.
+  /// Loads a whisper.cpp model from a file path or HTTPS URL. [language] is
+  /// an ISO 639-1 code such as `fi`, or `auto`. Plain http is refused.
   Future<Whisper> loadWhisper(
     String source, {
     String language = 'auto',
@@ -44,6 +43,7 @@ class Qvac {
     final reply = await rpc.call('loadModel', {
       'modelSrc': source,
       'modelType': 'whispercpp-transcription',
+      'requireSecureTransport': true,
       'modelConfig': {
         'language': language,
         'audio_format': 's16le',
@@ -73,33 +73,61 @@ class Whisper {
   /// The worker's id for this model.
   final String id;
 
-  /// Audio format [transcribe] expects: 16 kHz, mono, signed 16-bit little endian.
+  /// Sample rate [transcribe] expects. Audio is mono, signed 16-bit little endian.
   static const sampleRate = 16000;
 
-  /// Transcribes raw PCM audio and returns the text.
-  ///
-  /// Whisper often drops the first word of short clips, so [leadingSilence]
-  /// is added in front. Set it to [Duration.zero] for long recordings.
+  static int _lastRequest = 0;
+
+  /// Transcribes raw PCM audio. Whisper often drops the first word of short
+  /// clips, so [leadingSilence] goes in front; use [Duration.zero] for long ones.
   Future<String> transcribe(
     Uint8List pcm16, {
     Duration leadingSilence = const Duration(milliseconds: 600),
     String? prompt,
+    Duration? timeout,
   }) async {
+    if (leadingSilence.isNegative) {
+      throw ArgumentError.value(
+          leadingSilence, 'leadingSilence', 'must not be negative');
+    }
+    if (pcm16.length.isOdd) {
+      throw ArgumentError.value(
+          pcm16.length, 'pcm16', 'must be whole 16-bit samples');
+    }
     final pad = leadingSilence.inMilliseconds * sampleRate ~/ 1000 * 2;
     final audio = Uint8List(pad + pcm16.length)
       ..setRange(pad, pad + pcm16.length, pcm16);
+    final requestId = 'qvac_flutter-${++_lastRequest}';
     final text = StringBuffer();
-    await for (final part in _qvac.rpc.stream('transcribe', {
+    final done = _qvac.rpc.stream('transcribe', {
       'modelId': id,
+      'requestId': requestId,
       'audioChunk': {'type': 'base64', 'value': base64Encode(audio)},
       if (prompt != null) 'prompt': prompt,
-    })) {
-      text.write(part['text'] ?? '');
+    }).forEach((part) => text.write(part['text'] ?? ''));
+    try {
+      await (timeout == null ? done : done.timeout(timeout));
+    } on TimeoutException {
+      await _cancel({'operation': 'request', 'requestId': requestId});
+      rethrow;
     }
     return text.toString().trim();
   }
 
+  /// Stops every transcription running on this model.
+  Future<void> cancel() =>
+      _cancel({'operation': 'broad', 'modelId': id, 'kind': 'transcribe'});
+
+  Future<void> _cancel(Map<String, dynamic> args) async {
+    try {
+      await _qvac.rpc.call('cancel', args).timeout(const Duration(seconds: 10));
+    } catch (_) {
+      // Nothing left to stop.
+    }
+  }
+
   /// Frees the model's memory. Keeps the downloaded file.
-  Future<void> unload() =>
-      _qvac.rpc.call('unloadModel', {'modelId': id, 'clearStorage': false});
+  Future<void> unload() => _qvac.rpc
+      .call('unloadModel', {'modelId': id, 'clearStorage': false}).timeout(
+          const Duration(seconds: 30));
 }

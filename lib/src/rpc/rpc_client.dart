@@ -14,10 +14,8 @@ class RpcClosedException implements Exception {
   String toString() => 'RpcClosedException${reason == null ? '' : ': $reason'}';
 }
 
-/// The calling side of a bare-rpc connection.
-///
-/// [input] is the raw bytes from the other side, in chunks of any size.
-/// [send] writes one whole frame, length included.
+/// The calling side of a bare-rpc connection. [input] is raw bytes in chunks of
+/// any size; [send] writes one whole frame, length included.
 class RpcClient {
   RpcClient(
       {required Stream<List<int>> input,
@@ -35,6 +33,8 @@ class RpcClient {
   late final StreamSubscription<List<int>> _subscription;
   final _reader = FrameReader();
   final _calls = <int, _Call>{};
+  // Streams cancelled before the other side opened them. Closed once it does.
+  final _cancelled = <int>{};
   int _lastId = 0;
   bool _closed = false;
 
@@ -65,8 +65,12 @@ class RpcClient {
       onPause: () => _flag(id, StreamFlag.pause),
       onResume: () => _flag(id, StreamFlag.resume),
       onCancel: () {
-        if (id != null && _calls.remove(id) != null) {
-          _flag(id!, StreamFlag.destroy, force: true);
+        final call = id == null ? null : _calls.remove(id);
+        if (call is! _Streamed) return;
+        if (call.opened) {
+          _flag(id, StreamFlag.destroy, force: true);
+        } else {
+          _cancelled.add(id!);
         }
       },
     );
@@ -119,9 +123,15 @@ class RpcClient {
   }
 
   void _onResponse(RpcResponse m) {
-    final call = _calls[m.id];
-    if (call == null) return;
     final opensStream = m.stream & StreamFlag.open != 0;
+    final call = _calls[m.id];
+    if (call == null) {
+      if (_cancelled.remove(m.id) && opensStream) {
+        _write(RpcStreamFrame(m.id, StreamFlag.response | StreamFlag.open));
+        _write(RpcStreamFrame(m.id, StreamFlag.response | StreamFlag.destroy));
+      }
+      return;
+    }
     switch (call) {
       case _ when m.error != null:
         _calls.remove(m.id);
@@ -134,8 +144,9 @@ class RpcClient {
       case _Unary():
         _calls.remove(m.id);
         call.reply.complete(m.data ?? Uint8List(0));
-      case _Streamed() when opensStream:
+      case final _Streamed streamed when opensStream:
         // The other side holds back its data until it sees this.
+        streamed.opened = true;
         _write(RpcStreamFrame(m.id, StreamFlag.response | StreamFlag.open));
       case _Streamed(:final out):
         _calls.remove(m.id);
@@ -187,6 +198,7 @@ class _Streamed extends _Call {
   _Streamed(this.out);
 
   final StreamController<Uint8List> out;
+  bool opened = false;
 
   @override
   void fail(Object error) {

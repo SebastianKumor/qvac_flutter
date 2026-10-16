@@ -13,31 +13,31 @@ Uint8List frame(Uint8List body) {
 
 /// Turns chunks of bytes, cut anywhere, back into whole message bodies.
 class FrameReader {
-  Uint8List _buffer = Uint8List(0);
+  final _pending = BytesBuilder();
+  // Bytes needed before the next frame can be read. Avoids re-copying big frames.
+  int _need = 4;
 
   List<Uint8List> add(List<int> chunk) {
-    _buffer = _buffer.isEmpty
-        ? Uint8List.fromList(chunk)
-        : (BytesBuilder(copy: false)
-              ..add(_buffer)
-              ..add(chunk))
-            .takeBytes();
+    _pending.add(chunk);
+    if (_pending.length < _need) return const [];
+    final buffer = _pending.takeBytes();
     final bodies = <Uint8List>[];
     var at = 0;
-    while (_buffer.length - at >= 4) {
+    _need = 4;
+    while (buffer.length - at >= 4) {
       final length =
-          ByteData.sublistView(_buffer, at).getUint32(0, Endian.little);
+          ByteData.sublistView(buffer, at).getUint32(0, Endian.little);
       if (length > maxFrameLength) {
         throw FormatException('bare-rpc frame of $length bytes is too big');
       }
-      if (_buffer.length - at - 4 < length) break;
-      bodies.add(Uint8List.fromList(
-          Uint8List.sublistView(_buffer, at + 4, at + 4 + length)));
+      if (buffer.length - at - 4 < length) {
+        _need = 4 + length;
+        break;
+      }
+      bodies.add(Uint8List.sublistView(buffer, at + 4, at + 4 + length));
       at += 4 + length;
     }
-    _buffer = at == 0
-        ? _buffer
-        : Uint8List.fromList(Uint8List.sublistView(_buffer, at));
+    if (at < buffer.length) _pending.add(Uint8List.sublistView(buffer, at));
     return bodies;
   }
 }

@@ -46,6 +46,7 @@ android {
 
     defaultConfig {
         minSdk = 24
+        consumerProguardFiles("consumer-rules.pro")
         ndk {
             // The worker's addons are only built for 64-bit ARM.
             abiFilters += "arm64-v8a"
@@ -73,24 +74,37 @@ fun fetchRelease(): File {
     @Suppress("UNCHECKED_CAST")
     val release = groovy.json.JsonSlurper().parse(file("release.json")) as Map<String, String>
     val sha256 = release.getValue("sha256")
-    val dir = layout.buildDirectory.dir("qvac-binaries/$sha256").get().asFile
+    // In the Gradle home, so flutter clean doesn't throw away 60 MB.
+    val dir = File(gradle.gradleUserHomeDir, "caches/qvac_flutter/$sha256")
     if (File(dir, "libs/bare-kit.jar").isFile) return dir
     val url = (findProperty("qvacBinariesUrl") as String?) ?: release.getValue("url")
-    val zip = File(dir.parentFile, "$sha256.zip")
+    if (gradle.startParameter.isOffline) {
+        throw GradleException("qvac_flutter: native binaries are not cached yet. Build once online to fetch $url")
+    }
+    val zip = File(dir.parentFile, "$sha256.zip.part")
     zip.parentFile.mkdirs()
     logger.lifecycle("qvac_flutter: downloading native binaries from $url")
-    URI(url).toURL().openStream().use { input -> zip.outputStream().use { input.copyTo(it) } }
+    val connection = URI(url).toURL().openConnection().apply {
+        connectTimeout = 30_000
+        readTimeout = 60_000
+    }
+    connection.getInputStream().use { input -> zip.outputStream().use { input.copyTo(it) } }
     val actual = MessageDigest.getInstance("SHA-256").digest(zip.readBytes())
         .joinToString("") { "%02x".format(it) }
     if (actual != sha256) {
         zip.delete()
         throw GradleException("qvac_flutter: $url has SHA-256 $actual, expected $sha256")
     }
+    // Unpack next to it and rename, so a stopped build never leaves half a folder.
+    val tmp = File(dir.parentFile, "$sha256.tmp")
+    tmp.deleteRecursively()
     copy {
         from(zipTree(zip))
-        into(dir)
+        into(tmp)
     }
     zip.delete()
+    dir.deleteRecursively()
+    if (!tmp.renameTo(dir)) throw GradleException("qvac_flutter: could not move $tmp to $dir")
     return dir
 }
 

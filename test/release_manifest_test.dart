@@ -8,21 +8,30 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('Package.swift downloads every framework in release.json', () {
     final manifest = File('ios/qvac_flutter/Package.swift').readAsStringSync();
-    final release = jsonDecode(File('ios/qvac_flutter/release.json').readAsStringSync()) as List;
+    final release =
+        jsonDecode(File('ios/qvac_flutter/release.json').readAsStringSync())
+            as List;
     expect(manifest, isNot(contains('path: "Frameworks/')),
-        reason: 'Package.swift uses local frameworks. Run node tool/worker/release.mjs.');
+        reason:
+            'Package.swift uses local frameworks. Run node tool/worker/release.mjs.');
     for (final r in release.cast<Map<String, dynamic>>()) {
       expect(manifest, contains(r['url']));
       expect(manifest, contains(r['checksum']));
     }
   });
 
-  test('release files point at the version in pubspec', () {
-    final version = RegExp(r'^version:\s*(\S+)', multiLine: true)
-        .firstMatch(File('pubspec.yaml').readAsStringSync())!
+  test('iOS and Android download from the tag in release.mjs', () {
+    final tag = RegExp(r"const tag = '([^']+)'")
+        .firstMatch(File('tool/worker/release.mjs').readAsStringSync())!
         .group(1);
-    final android = jsonDecode(File('android/release.json').readAsStringSync()) as Map;
-    expect(android['url'], contains('/v$version/'));
-    expect(File('ios/qvac_flutter/release.json').readAsStringSync(), contains('/v$version/'));
+    final android =
+        jsonDecode(File('android/release.json').readAsStringSync()) as Map;
+    expect(android['url'], contains('/download/$tag/'));
+    final ios =
+        jsonDecode(File('ios/qvac_flutter/release.json').readAsStringSync())
+            as List;
+    for (final r in ios.cast<Map<String, dynamic>>()) {
+      expect(r['url'], contains('/download/$tag/'));
+    }
   });
 }

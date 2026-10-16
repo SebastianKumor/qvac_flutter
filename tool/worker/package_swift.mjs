@@ -1,6 +1,5 @@
-// Writes ios/qvac_flutter/Package.swift with one binary target per framework.
-// SwiftPM caches manifests by their text, so the manifest lists targets itself
-// instead of looking at the disk.
+// Writes Package.swift with one binary target per framework. SwiftPM caches
+// manifests by their text, so the manifest can't look at the disk itself.
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 

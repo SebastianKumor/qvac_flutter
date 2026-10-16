@@ -8,6 +8,7 @@ import path from 'node:path'
 import link from 'bare-link'
 import { bundleSdk } from '@qvac/sdk/commands'
 import { writePackageSwift } from './package_swift.mjs'
+import { licenseTexts } from './licenses.mjs'
 
 const root = import.meta.dirname
 const plugin = path.resolve(root, '../..')
@@ -126,6 +127,7 @@ used under its own license, linked from the package's npm page.
 
 [BareKit](https://github.com/holepunchto/bare-kit) 2.5.5, Apache-2.0. It
 embeds the Bare runtime (Apache-2.0), V8 (BSD-3-Clause) and libuv (MIT).
+Android builds also ship the NDK's libc++ (Apache-2.0 with LLVM exception).
 
 ## npm packages in the worker bundle
 
@@ -138,5 +140,6 @@ ${rows.join('\n')}
 \`\`\`
 ${asrNotice.trim()}
 \`\`\`
-`)
+
+${await licenseTexts()}`)
 console.log(`Notices: ${rows.length} packages in THIRD_PARTY_NOTICES.md`)

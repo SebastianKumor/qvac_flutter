@@ -7,10 +7,8 @@ import 'dart:typed_data';
 import '../qvac_rpc.dart';
 import '../rpc/rpc_client.dart';
 
-/// Runs the QVAC worker as a child process, the way the Python SDK does.
-///
-/// The worker dials back over loopback TCP and must first send the token we
-/// put in its environment, so other local programs can't take the connection.
+/// Runs the QVAC worker as a child process that dials back over loopback TCP.
+/// Only workers that send a token (`token-v1`) stop other local programs connecting first.
 class WorkerProcess {
   WorkerProcess._(this._process, this._socket, this.rpc);
 
