@@ -1,7 +1,7 @@
 ## 0.1.1
 
-* Android: `Qvac.start` reads the worker and starts BareKit on a background thread. The first start no longer blocks the UI for about half a second.
-* README: an idle worker uses no CPU, so it doesn't need pausing in the background.
+* Android: `Qvac.start` reads the worker and starts BareKit on a background thread. The first start no longer blocks the UI, which took about half a second on an emulator.
+* README: explains why the worker isn't paused in the background.
 
 ## 0.1.0
 

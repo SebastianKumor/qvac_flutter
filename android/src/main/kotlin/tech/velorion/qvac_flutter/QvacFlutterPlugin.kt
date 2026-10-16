@@ -22,7 +22,8 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
     private lateinit var context: Context
     private val main = Handler(Looper.getMainLooper())
     private val background = Executors.newSingleThreadExecutor()
-    private var starting = false
+    // Calls waiting for a start already in progress, such as one from after a hot restart.
+    private var starting: MutableList<MethodChannel.Result>? = null
     private var attached = false
 
     private var worklet: Worklet? = null
@@ -44,6 +45,7 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         attached = false
+        background.shutdown()
         stop()
         methods.setMethodCallHandler(null)
         events.setStreamHandler(null)
@@ -73,13 +75,17 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
             early.clear()
             return result.success("running")
         }
-        if (starting) return result.error("start_failed", "The worker is already starting", null)
-        starting = true
+        starting?.let {
+            it.add(result)
+            return
+        }
+        val waiting = mutableListOf(result)
+        starting = waiting
         // Reading the bundle and starting the worklet takes long enough to drop frames.
         background.execute {
             val outcome = runCatching { launch(homeDir) }
             main.post {
-                starting = false
+                starting = null
                 outcome.fold(
                     onSuccess = { worklet ->
                         if (!attached) {
@@ -89,10 +95,14 @@ class QvacFlutterPlugin : FlutterPlugin, MethodChannel.MethodCallHandler, EventC
                         this.worklet = worklet
                         ipc = IPC(worklet)
                         read()
-                        result.success("started")
+                        flush()
+                        // Later callers find a worker they didn't start, like after a hot restart.
+                        waiting.forEachIndexed { i, r -> r.success(if (i == 0) "started" else "running") }
                     },
                     // Throwable: a missing native library is an Error, not an Exception.
-                    onFailure = { e -> result.error("start_failed", e.message ?: e.toString(), null) },
+                    onFailure = { e ->
+                        waiting.forEach { it.error("start_failed", e.message ?: e.toString(), null) }
+                    },
                 )
             }
         }

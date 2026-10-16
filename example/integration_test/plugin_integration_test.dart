@@ -42,4 +42,22 @@ void main() {
       await qvac.close();
     }
   }, timeout: const Timeout(Duration(minutes: 10)));
+
+  testWidgets('start during a start, as after a quick hot restart', (
+    tester,
+  ) async {
+    // A start from before the restart that Dart no longer waits for.
+    final first = const MethodChannel('qvac_flutter')
+        .invokeMethod<String>('start');
+    final qvac = await Qvac.start();
+    try {
+      expect(await first, 'started');
+      final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+      final clip = await rootBundle.load('assets/sample_fi.pcm');
+      final text = await whisper.transcribe(clip.buffer.asUint8List());
+      expect(text.toLowerCase(), contains('kahvia'));
+    } finally {
+      await qvac.close();
+    }
+  }, timeout: const Timeout(Duration(minutes: 10)));
 }
