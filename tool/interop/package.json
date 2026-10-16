@@ -1,0 +1,8 @@
+{
+  "name": "qvac-flutter-interop",
+  "private": true,
+  "description": "Runs the real bare-rpc package against the Dart client in test/interop_test.dart.",
+  "dependencies": {
+    "bare-rpc": "1.3.8"
+  }
+}
