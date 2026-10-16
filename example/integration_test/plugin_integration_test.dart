@@ -1,24 +1,27 @@
-// This is a basic Flutter integration test.
-//
-// Since integration tests run in a full Flutter application, they can interact
-// with the host side of a plugin implementation, unlike Dart unit tests.
-//
-// For more information about Flutter integration tests, please see
-// https://flutter.dev/to/integration-testing
-
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-
 import 'package:qvac_flutter/qvac_flutter.dart';
+import 'package:qvac_flutter_example/main.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('getPlatformVersion test', (WidgetTester tester) async {
-    final QvacFlutter plugin = QvacFlutter();
-    final String? version = await plugin.getPlatformVersion();
-    // The version string depends on the host platform running the test, so
-    // just assert that some non-empty string is returned.
-    expect(version?.isNotEmpty, true);
-  });
+  testWidgets('starts the worker and transcribes Finnish', (tester) async {
+    final watch = Stopwatch()..start();
+    final qvac = await Qvac.start();
+    debugPrint('started in ${watch.elapsedMilliseconds} ms');
+    try {
+      final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+      debugPrint('loaded in ${watch.elapsedMilliseconds} ms');
+      final clip = await rootBundle.load('assets/sample_fi.pcm');
+      final text = await whisper.transcribe(clip.buffer.asUint8List());
+      debugPrint('heard "$text" at ${watch.elapsedMilliseconds} ms');
+      expect(text.toLowerCase(), contains('kahvia'));
+      await whisper.unload();
+    } finally {
+      await qvac.close();
+    }
+  }, timeout: const Timeout(Duration(minutes: 10)));
 }

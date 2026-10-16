@@ -46,3 +46,6 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Sample clip made from the Suomi app audio; not ours to publish.
+/assets/sample_fi.pcm

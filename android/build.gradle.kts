@@ -39,30 +39,21 @@ android {
         getByName("main") {
             java.srcDirs("src/main/kotlin")
         }
-        getByName("test") {
-            java.srcDirs("src/test/kotlin")
-        }
     }
 
     defaultConfig {
         minSdk = 24
-    }
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-            all {
-                it.useJUnitPlatform()
-
-                it.outputs.upToDateWhen { false }
-
-                it.testLogging {
-                    events("passed", "skipped", "failed", "standardOut", "standardError")
-                    showStandardStreams = true
-                }
-            }
+        ndk {
+            // The worker's addons are only built for 64-bit ARM.
+            abiFilters += "arm64-v8a"
         }
     }
+
+    androidResources {
+        // The worker bundle is read whole at start; compressing it only costs time.
+        noCompress += "bundle"
+    }
+
 }
 
 kotlin {
@@ -72,6 +63,7 @@ kotlin {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.mockito:mockito-core:5.0.0")
+    // BareKit's Java classes. Its .so files and the worker sit in src/main/jniLibs and assets,
+    // put there by tool/worker (npm run build).
+    implementation(files("libs/bare-kit.jar"))
 }

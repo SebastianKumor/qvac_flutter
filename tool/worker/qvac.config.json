@@ -1,0 +1,4 @@
+{
+  "plugins": ["@qvac/sdk/whispercpp-transcription/plugin"],
+  "includeAudioDecoder": false
+}

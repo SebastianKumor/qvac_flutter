@@ -31,3 +31,10 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 /build/
 /coverage/
+
+# Built by tool/worker (npm run build). Shipped through releases, not git.
+/ios/qvac_flutter/Frameworks/
+/ios/qvac_flutter/Sources/qvac_flutter/Resources/worker.bundle
+/android/src/main/jniLibs/
+/android/src/main/assets/worker.bundle
+/android/libs/

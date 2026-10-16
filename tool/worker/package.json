@@ -1,0 +1,22 @@
+{
+  "name": "qvac-flutter-worker",
+  "private": true,
+  "type": "module",
+  "description": "Builds the QVAC worker bundle and native addons that the plugin ships.",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": "^22.21.0 || >=24.9.0"
+  },
+  "dependencies": {
+    "@qvac/asr-ggml-android-arm64": "0.7.0",
+    "@qvac/asr-ggml-ios": "0.7.0",
+    "@qvac/sdk": "0.21.0",
+    "bare-link": "4.0.1",
+    "@qvac/decoder-audio": "file:./stubs/decoder-audio"
+  },
+  "overrides": {
+    "@qvac/decoder-audio": "$@qvac/decoder-audio"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@qvac/decoder-audio",
+  "version": "0.7.0-qvac-flutter-stub",
+  "description": "Stands in for the FFmpeg decoder so the worker ships without FFmpeg. qvac_flutter sends raw PCM.",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package": "./package.json"
+  }
+}
