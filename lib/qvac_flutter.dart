@@ -8,6 +8,8 @@ import 'dart:typed_data';
 import 'src/mobile_worker.dart';
 import 'src/qvac_rpc.dart';
 
+export 'src/model_download.dart'
+    show DownloadProgress, ModelDownload, ModelDownloadException;
 export 'src/qvac_rpc.dart' show QvacException, QvacRpc;
 export 'src/rpc/messages.dart' show RpcError;
 export 'src/rpc/rpc_client.dart' show RpcClosedException;

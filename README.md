@@ -47,6 +47,31 @@ emulator), so the plugin doesn't pause it when the app goes to the background.
 Work that is running, like a model download or a transcription, keeps going
 until it finishes or the OS suspends the app.
 
+## Downloading models with progress
+
+`loadWhisper` with a URL waits until the whole model is downloaded and loaded,
+with no progress. For a big model, download it first with `ModelDownload`:
+
+```dart
+final download = ModelDownload.start(
+  Uri.parse('https://huggingface.co/ggerganov/whisper.cpp/resolve/'
+      '5359861c739e955e79d9a303bcbc70fb988958b1/ggml-small-q8_0.bin'),
+  File('${dir.path}/ggml-small-q8_0.bin'),
+  sha256: '49c8fb02b65e6049d5fa6c04f81f53b867b5ec9540406812c643f177317f779f',
+);
+download.progress.listen((p) => print('${(p.fraction! * 100).floor()}%'));
+final file = await download.done;
+final whisper = await qvac.loadWhisper(file.path, language: 'fi');
+```
+
+- The file is checked against `sha256` before it is used. A file that doesn't
+  match is deleted.
+- A dropped connection is retried 5 times and continues with a Range request.
+  `cancel()` keeps the partial file, so the next download continues too.
+- If the file is already there and matches, nothing is downloaded.
+- Pick the folder yourself. On iOS, a folder like Caches stays out of iCloud
+  backups, but the system may delete it when storage runs low.
+
 `transcribe` takes an optional `timeout`. When it runs out, the transcription is
 cancelled on the worker too. `Whisper.cancel()` stops every running
 transcription on that model.

@@ -1,3 +1,8 @@
+## 0.2.0
+
+* `ModelDownload` downloads a model file with progress, a SHA-256 check, retries, resume after a dropped connection, and cancel. Pass the file to `loadWhisper`.
+* New dependency: `crypto`.
+
 ## 0.1.1
 
 * Android: `Qvac.start` reads the worker and starts BareKit on a background thread. The first start no longer blocks the UI, which took about half a second on an emulator.
