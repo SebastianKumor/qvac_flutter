@@ -1,5 +1,5 @@
 name: qvac_flutter
-description: "Unofficial Flutter plugin for QVAC, Tether's local AI. On-device speech to text with Whisper on iOS and Android."
+description: "Unofficial Flutter plugin for QVAC, Tether's local AI. On-device speech to text with Whisper on iOS, Android, macOS, Linux and Windows."
 version: 0.2.0
 repository: https://github.com/SebastianKumor/qvac_flutter
 issue_tracker: https://github.com/SebastianKumor/qvac_flutter/issues
@@ -15,6 +15,7 @@ environment:
 
 dependencies:
   crypto: ^3.0.6
+  ffi: ^2.2.0
   flutter:
     sdk: flutter
 
@@ -31,4 +32,10 @@ flutter:
         pluginClass: QvacFlutterPlugin
       ios:
         pluginClass: QvacFlutterPlugin
+      macos:
+        pluginClass: QvacFlutterPlugin
+      linux:
+        ffiPlugin: true
+      windows:
+        ffiPlugin: true
 

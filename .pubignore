@@ -31,3 +31,7 @@
 /upload.sh
 /v0.1.0/
 /binaries-*/
+
+/build_desktop/
+/macos/qvac_flutter/Frameworks/
+/example/macos/Flutter/ephemeral/

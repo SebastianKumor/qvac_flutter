@@ -1,7 +1,9 @@
 ## 0.2.0
 
 * `ModelDownload` downloads a model file with progress, a SHA-256 check, retries, resume after a dropped connection, and cancel. Pass the file to `loadWhisper`.
-* New dependency: `crypto`.
+* macOS (Apple Silicon, macOS 13+), Linux (x64, arm64) and Windows (x64). `Qvac.start` runs BareKit in the app through FFI. Linux and Windows are not tested yet.
+* The desktop binaries come from their own GitHub release, `desktop-1`.
+* New dependencies: `crypto` and `ffi`.
 
 ## 0.1.1
 

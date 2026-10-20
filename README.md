@@ -2,14 +2,14 @@
 
 Run [QVAC](https://github.com/tetherto/qvac) speech to text in a Flutter app,
 fully on the device. No server, no API key, works offline after the model is
-downloaded. iOS and Android.
+downloaded. iOS, Android, macOS, Linux and Windows.
 
 > This is an unofficial community package. It is not affiliated with,
 > endorsed by, or supported by Tether or the QVAC project.
 
 ## What it does
 
-- Starts the QVAC worker inside your app with BareKit.
+- Starts the QVAC worker inside your app with BareKit, on mobile and desktop.
 - Loads a [whisper.cpp](https://github.com/ggml-org/whisper.cpp) model from a
   URL or a file.
 - Turns 16 kHz mono PCM audio into text, in any of Whisper's 99 languages.
@@ -97,11 +97,15 @@ of silence in front to stop that. Without it, `small` lost the first word on
 
 ## Platform support
 
-| | iOS | Android |
-| --- | --- | --- |
-| Minimum | iOS 15 | API 24 |
-| CPU | arm64 devices and arm64 simulators | arm64-v8a |
-| Size added to the app | about 55 MB | about 130 MB before compression |
+| | iOS | Android | macOS | Linux | Windows |
+| --- | --- | --- | --- | --- | --- |
+| Minimum | iOS 15 | API 24 | macOS 13 | glibc | Windows 10 |
+| CPU | arm64 devices and simulators | arm64-v8a | Apple Silicon | x64, arm64 | x64 |
+| Size added | about 55 MB | about 130 MB before compression | about 95 MB | about 200 MB (x64) | about 110 MB |
+| Tested | yes | yes | yes | no | no |
+
+Linux and Windows are built the same way as macOS and use the same Dart code,
+but nobody has run them yet. Please open an issue with what you see.
 
 Flutter 3.44 or newer. On iOS the plugin only works through Swift Package
 Manager, which you may need to turn on:
@@ -110,24 +114,42 @@ Manager, which you may need to turn on:
 flutter config --enable-swift-package-manager
 ```
 
-There is no x86_64 code, so Intel Mac simulators, x86_64 Android emulators and
-32-bit Android phones are not supported. On those, `Qvac.start` throws.
+There is no x86_64 code for Apple or Android, so Intel Macs, Intel Mac
+simulators, x86_64 Android emulators and 32-bit Android phones are not
+supported. On those, `Qvac.start` throws.
 
 On Android the build downloads the native binaries (about 40 MB) once from this
 package's GitHub release and caches them in the Gradle home folder. To use a
 mirror, set `qvacBinariesUrl` in `gradle.properties`.
 
-Both platforms pass the example's integration test, which starts the worker,
-downloads Whisper base and transcribes a Finnish clip.
+### macOS
 
-Not yet checked on a physical iPhone or Android phone.
+Set the app's minimum to macOS 13 (`MACOSX_DEPLOYMENT_TARGET = 13.0` in the
+Runner target). A sandboxed app needs the
+`com.apple.security.network.client` entitlement to download models. Models go
+to Application Support, left out of Time Machine.
+
+### Linux and Windows
+
+The build downloads the binaries once from this package's GitHub release and
+caches them in `~/.cache/qvac_flutter` (Linux) or `%LOCALAPPDATA%\qvac_flutter`
+(Windows). To use a mirror, set the `QVAC_BINARIES_URL` environment variable to
+the zip's URL. Models go to `~/.local/share/<app>/qvac` or
+`%LOCALAPPDATA%\<app>\qvac`.
+
+### Tests
+
+iOS, Android and macOS pass the example's integration test, which starts the
+worker, downloads Whisper base and transcribes a Finnish clip. It also ran on
+a physical iPhone. Not yet checked on a physical Android phone.
 
 ## How it works
 
 QVAC's engine runs as a JavaScript worker on [Bare](https://github.com/holepunchto/bare).
-On the phone it runs in a BareKit worklet. The native side of this plugin only
-passes bytes between the worklet and Dart. The `bare-rpc` protocol, the QVAC
-JSON layer and the public API are all Dart, shared by both platforms.
+It runs in a BareKit worklet inside the app. On iOS and Android the native side
+of this plugin only passes bytes between the worklet and Dart. On desktop, Dart
+calls BareKit's C API directly through FFI. The `bare-rpc` protocol, the QVAC
+JSON layer and the public API are all Dart, shared by every platform.
 
 The worker is built by `tool/worker` with only the whisper plugin. QVAC's
 FFmpeg decoder is replaced by a stub, which keeps FFmpeg out of your app. That
@@ -145,7 +167,11 @@ npm run build
 
 This bundles the worker, links its native addons, downloads BareKit 2.5.5
 (checked against a pinned SHA-256) and copies everything into `ios/` and
-`android/`.
+`android/`. `npm run build:desktop` does the same for desktop, into `macos/`
+and `build_desktop/`.
+
+`npm ci` refuses the Linux and Windows addon packages on a Mac, because of
+their `os` fields. Use `npm ci --force`.
 
 ## License
 

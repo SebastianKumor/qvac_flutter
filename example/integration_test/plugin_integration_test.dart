@@ -1,9 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:qvac_flutter/qvac_flutter.dart';
+// ignore: implementation_imports
+import 'package:qvac_flutter/src/desktop_worker.dart';
 import 'package:qvac_flutter_example/main.dart';
+
+// Desktop starts in Dart, so there's no native start to race with.
+final desktop = Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +34,12 @@ void main() {
 
   testWidgets('restarts a worker left from a hot restart', (tester) async {
     // Starts a worklet Dart doesn't know about, the way a hot restart leaves one.
-    await const MethodChannel('qvac_flutter').invokeMethod<String>('start');
+    if (desktop) {
+      await Qvac.start();
+      DesktopWorker.debugForget();
+    } else {
+      await const MethodChannel('qvac_flutter').invokeMethod<String>('start');
+    }
     final qvac = await Qvac.start();
     try {
       final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
@@ -43,21 +55,24 @@ void main() {
     }
   }, timeout: const Timeout(Duration(minutes: 10)));
 
-  testWidgets('start during a start, as after a quick hot restart', (
-    tester,
-  ) async {
-    // A start from before the restart that Dart no longer waits for.
-    final first = const MethodChannel('qvac_flutter')
-        .invokeMethod<String>('start');
-    final qvac = await Qvac.start();
-    try {
-      expect(await first, 'started');
-      final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
-      final clip = await rootBundle.load('assets/sample_fi.pcm');
-      final text = await whisper.transcribe(clip.buffer.asUint8List());
-      expect(text.toLowerCase(), contains('kahvia'));
-    } finally {
-      await qvac.close();
-    }
-  }, timeout: const Timeout(Duration(minutes: 10)));
+  testWidgets(
+    'start during a start, as after a quick hot restart',
+    skip: desktop,
+    (tester) async {
+      // A start from before the restart that Dart no longer waits for.
+      final first = const MethodChannel('qvac_flutter')
+          .invokeMethod<String>('start');
+      final qvac = await Qvac.start();
+      try {
+        expect(await first, 'started');
+        final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+        final clip = await rootBundle.load('assets/sample_fi.pcm');
+        final text = await whisper.transcribe(clip.buffer.asUint8List());
+        expect(text.toLowerCase(), contains('kahvia'));
+      } finally {
+        await qvac.close();
+      }
+    },
+    timeout: const Timeout(Duration(minutes: 10)),
+  );
 }

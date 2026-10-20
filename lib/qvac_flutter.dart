@@ -5,6 +5,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform;
+
+import 'src/desktop_worker.dart';
 import 'src/mobile_worker.dart';
 import 'src/qvac_rpc.dart';
 
@@ -31,6 +35,15 @@ class Qvac {
     String? homeDir,
     Map<String, dynamic> config = const {},
   }) async {
+    if (const [
+      TargetPlatform.macOS,
+      TargetPlatform.linux,
+      TargetPlatform.windows
+    ].contains(defaultTargetPlatform)) {
+      final worker =
+          await DesktopWorker.start(homeDir: homeDir, config: config);
+      return Qvac._(worker.rpc, worker.shutdown);
+    }
     final worker = await MobileWorker.start(homeDir: homeDir, config: config);
     return Qvac._(worker.rpc, worker.shutdown);
   }

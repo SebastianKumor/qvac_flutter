@@ -4,17 +4,22 @@
   "type": "module",
   "description": "Builds the QVAC worker bundle and native addons that the plugin ships.",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "build:desktop": "node build_desktop.mjs"
   },
   "engines": {
     "node": "^22.21.0 || >=24.9.0"
   },
   "dependencies": {
     "@qvac/asr-ggml-android-arm64": "0.7.0",
+    "@qvac/asr-ggml-darwin-arm64": "0.7.0",
     "@qvac/asr-ggml-ios": "0.7.0",
+    "@qvac/asr-ggml-linux-arm64": "0.7.0",
+    "@qvac/asr-ggml-linux-x64": "0.7.0",
+    "@qvac/asr-ggml-win32-x64": "0.7.0",
+    "@qvac/decoder-audio": "file:./stubs/decoder-audio",
     "@qvac/sdk": "0.21.0",
-    "bare-link": "4.0.1",
-    "@qvac/decoder-audio": "file:./stubs/decoder-audio"
+    "bare-link": "4.0.1"
   },
   "overrides": {
     "@qvac/decoder-audio": "$@qvac/decoder-audio"

@@ -44,3 +44,8 @@ migrate_working_dir/
 /upload.sh
 /v0.1.0/
 /binaries-*/
+
+# Built by tool/worker (npm run build:desktop).
+/build_desktop/
+/macos/qvac_flutter/Frameworks/
+/macos/qvac_flutter/Sources/qvac_flutter/Resources/worker.bundle
