@@ -41,6 +41,7 @@ migrate_working_dir/
 
 # Release archive for moving binaries to another machine.
 /qvac_release_*.tgz
+/qvac_release_*/
 /upload.sh
 /v0.1.0/
 /binaries-*/
