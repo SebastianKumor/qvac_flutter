@@ -22,11 +22,16 @@ Speech to text is the only feature so far. The protocol client underneath
 ```dart
 import 'package:qvac_flutter/qvac_flutter.dart';
 
+// Once, with progress. Later calls check the file and return it.
+final model = await ModelDownload.start(
+  Uri.parse('https://huggingface.co/ggerganov/whisper.cpp/resolve/'
+      '5359861c739e955e79d9a303bcbc70fb988958b1/ggml-small-q8_0.bin'),
+  File('${dir.path}/ggml-small-q8_0.bin'),
+  sha256: '49c8fb02b65e6049d5fa6c04f81f53b867b5ec9540406812c643f177317f779f',
+).done;
+
 final qvac = await Qvac.start();
-final whisper = await qvac.loadWhisper(
-  'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-small-q8_0.bin',
-  language: 'fi',
-);
+final whisper = await qvac.loadWhisper(model.path, language: 'fi');
 
 // 16 kHz, mono, signed 16-bit little endian.
 final text = await whisper.transcribe(pcm);
@@ -34,9 +39,11 @@ final text = await whisper.transcribe(pcm);
 await qvac.close();
 ```
 
-The worker downloads the model on the first `loadWhisper` and keeps it, so
-later loads are fast and offline. The default folder is left out of iCloud and
-Android backups. Model URLs must be HTTPS.
+`loadWhisper` also takes an HTTPS URL and lets the worker download the model,
+but with no progress. Worse, in QVAC SDK 0.21.0 a model loaded that way only
+loads again while the device is online: offline, the worker checks the cached
+file for a GGUF header, and whisper.cpp models don't have one. Download with
+`ModelDownload` and pass the path.
 
 Start QVAC once per app. A second `Qvac.start` throws until you `close` the
 first. After a hot restart, `Qvac.start` stops the old worker and starts a new
@@ -49,26 +56,23 @@ until it finishes or the OS suspends the app.
 
 ## Downloading models with progress
 
-`loadWhisper` with a URL waits until the whole model is downloaded and loaded,
-with no progress. For a big model, download it first with `ModelDownload`:
-
 ```dart
-final download = ModelDownload.start(
-  Uri.parse('https://huggingface.co/ggerganov/whisper.cpp/resolve/'
-      '5359861c739e955e79d9a303bcbc70fb988958b1/ggml-small-q8_0.bin'),
-  File('${dir.path}/ggml-small-q8_0.bin'),
-  sha256: '49c8fb02b65e6049d5fa6c04f81f53b867b5ec9540406812c643f177317f779f',
-);
+final download = ModelDownload.start(url, target, sha256: hash);
 download.progress.listen((p) => print('${(p.fraction! * 100).floor()}%'));
 final file = await download.done;
 final whisper = await qvac.loadWhisper(file.path, language: 'fi');
 ```
 
 - The file is checked against `sha256` before it is used. A file that doesn't
-  match is deleted.
-- A dropped connection is retried 5 times and continues with a Range request.
-  `cancel()` keeps the partial file, so the next download continues too.
-- If the file is already there and matches, nothing is downloaded.
+  match is deleted. Without `sha256` nothing is checked, so pass it.
+- A dropped connection continues with a Range request. It gives up after 5
+  failures in a row with no new bytes. `cancel()` keeps the partial file, so
+  the next download continues too.
+- Redirects are followed only to HTTPS. Gzip is refused, so the bytes on disk
+  are the file's bytes.
+- If the file is already there and matches, nothing is downloaded. A second
+  `start` for the same file while one runs returns the running one.
+- Failures arrive on `progress` as errors too.
 - Pick the folder yourself. On iOS, a folder like Caches stays out of iCloud
   backups, but the system may delete it when storage runs low.
 
@@ -99,13 +103,16 @@ of silence in front to stop that. Without it, `small` lost the first word on
 
 | | iOS | Android | macOS | Linux | Windows |
 | --- | --- | --- | --- | --- | --- |
-| Minimum | iOS 15 | API 24 | macOS 13 | glibc | Windows 10 |
+| Minimum | iOS 15 | API 24 | macOS 13 | glibc 2.34 (Ubuntu 22.04, Debian 12) | Windows 10 with a Vulkan driver |
 | CPU | arm64 devices and simulators | arm64-v8a | Apple Silicon | x64, arm64 | x64 |
 | Size added | about 55 MB | about 130 MB before compression | about 95 MB | about 200 MB (x64) | about 110 MB |
-| Tested | yes | yes | yes | no | no |
+| Tested | yes | yes | yes | arm64 | no |
 
-Linux and Windows are built the same way as macOS and use the same Dart code,
-but nobody has run them yet. Please open an issue with what you see.
+Windows is built the same way and shares the Dart code, but nobody has run it
+yet. Please open an issue with what you see. The Windows speech addon links
+`vulkan-1.dll`, which GPU drivers install. On a machine without one, such as
+a VM without GPU drivers, it can't load. Linux x64 hasn't run either; it
+differs from arm64 only in the binaries.
 
 Flutter 3.44 or newer. On iOS the plugin only works through Swift Package
 Manager, which you may need to turn on:
@@ -139,8 +146,9 @@ the zip's URL. Models go to `~/.local/share/<app>/qvac` or
 
 ### Tests
 
-iOS, Android and macOS pass the example's integration test, which starts the
-worker, downloads Whisper base and transcribes a Finnish clip. It also ran on
+iOS, Android, macOS and Linux (arm64, in Ubuntu 24.04) pass the example's
+integration test, which starts the worker, downloads Whisper base with
+`ModelDownload` and transcribes a Finnish clip. It also ran on
 a physical iPhone. Not yet checked on a physical Android phone.
 
 ## How it works

@@ -20,15 +20,18 @@ export 'src/rpc/rpc_client.dart' show RpcClosedException;
 
 /// A running QVAC worker.
 class Qvac {
-  Qvac._(this.rpc, this._stop);
+  Qvac._(this.rpc, this._stop, [this._modelDefaults = const {}]);
 
-  /// Wraps a worker you started yourself, such as `WorkerProcess` on desktop.
+  /// Wraps a worker you started yourself, such as one in its own process.
   Qvac.fromRpc(this.rpc, {Future<void> Function()? onClose})
-      : _stop = onClose ?? rpc.close;
+      : _stop = onClose ?? rpc.close,
+        _modelDefaults = const {};
 
   /// The raw protocol, for calls this class doesn't wrap yet.
   final QvacRpc rpc;
   final Future<void> Function() _stop;
+  // Settings this platform's worker needs on every model, like where ggml's backends are.
+  final Map<String, dynamic> _modelDefaults;
 
   /// Starts the worker in this app. The first start takes a few seconds.
   static Future<Qvac> start({
@@ -42,7 +45,7 @@ class Qvac {
     ].contains(defaultTargetPlatform)) {
       final worker =
           await DesktopWorker.start(homeDir: homeDir, config: config);
-      return Qvac._(worker.rpc, worker.shutdown);
+      return Qvac._(worker.rpc, worker.shutdown, worker.modelDefaults);
     }
     final worker = await MobileWorker.start(homeDir: homeDir, config: config);
     return Qvac._(worker.rpc, worker.shutdown);
@@ -64,6 +67,7 @@ class Qvac {
         'audio_format': 's16le',
         'single_segment': true,
         'no_timestamps': true,
+        ..._modelDefaults,
         ...options,
       },
     });

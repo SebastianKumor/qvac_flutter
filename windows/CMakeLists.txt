@@ -4,7 +4,12 @@ project(${PROJECT_NAME} LANGUAGES CXX)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../cmake/qvac_binaries.cmake")
 
-qvac_binaries(windows-x64 QVAC_DIR)
+if(FLUTTER_TARGET_PLATFORM)
+  set(QVAC_TARGET "${FLUTTER_TARGET_PLATFORM}")
+else()
+  set(QVAC_TARGET "windows-x64")
+endif()
+qvac_binaries(${QVAC_TARGET} QVAC_DIR)
 
 # BareKit, the addons and the worker bundle all go next to the app's .exe, where
 # Windows looks for DLLs first.

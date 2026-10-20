@@ -44,9 +44,15 @@ for (const [name, t] of Object.entries(targets)) {
   const dir = path.join(out, name)
   for await (const _ of link(entry, { hosts: [t.host], out: dir }));
   await cp(path.join(unpacked, t.barekit), path.join(dir, path.basename(t.barekit)), { recursive: true })
-  // One folder on Linux: BareKit finds the addons next to itself.
+  // Linux: addons in one folder, which Dart loads from. ggml looks for its CPU
+  // and Vulkan backends in <backendsDir>/<host>/qvac__asr-ggml instead.
   if (existsSync(path.join(dir, 'lib'))) {
-    for (const f of await readdir(path.join(dir, 'lib'))) await rename(path.join(dir, 'lib', f), path.join(dir, f))
+    const backends = path.join(dir, 'backends', t.host, 'qvac__asr-ggml')
+    await mkdir(backends, { recursive: true })
+    for (const f of await readdir(path.join(dir, 'lib'))) {
+      const to = f.startsWith('libqvac-speech-ggml-') ? path.join(backends, f) : path.join(dir, f)
+      await rename(path.join(dir, 'lib', f), to)
+    }
     await rm(path.join(dir, 'lib'), { recursive: true })
   }
   await writeFile(path.join(dir, 'worker.bundle'), bundle)
@@ -65,17 +71,19 @@ for (const f of await readdir(mac)) {
     '-output', path.join(frameworks, f.replace(/\.framework$/, '.xcframework'))], { stdio: 'ignore' })
 }
 // BareKit's zip has copies where symlinks belong, and a universal top-level binary
-// next to the arm64 one in Versions/A. Rebuild the framework around Versions/A.
-const slice = path.join(frameworks, 'BareKit.xcframework', 'macos-arm64_x86_64')
-const fw = path.join(slice, 'BareKit.framework')
-await mkdir(slice, { recursive: true })
-await cp(path.join(mac, 'BareKit.xcframework', 'Info.plist'), path.join(frameworks, 'BareKit.xcframework', 'Info.plist'))
+// next to the arm64 one in Versions/A. Rebuild the framework around Versions/A,
+// so the xcframework says arm64 only, which is what every addon is too.
+const staging = path.join(root, 'cache', 'BareKit-macos')
+const fw = path.join(staging, 'BareKit.framework')
+await rm(staging, { recursive: true, force: true })
 await cp(path.join(mac, 'BareKit.xcframework', 'macos-arm64_x86_64', 'BareKit.framework', 'Versions', 'A'),
   path.join(fw, 'Versions', 'A'), { recursive: true })
 await symlink('A', path.join(fw, 'Versions', 'Current'))
 for (const name of ['BareKit', 'Headers', 'Resources']) {
   await symlink(path.join('Versions', 'Current', name), path.join(fw, name))
 }
+execFileSync('xcodebuild', ['-create-xcframework', '-framework', fw,
+  '-output', path.join(frameworks, 'BareKit.xcframework')], { stdio: 'ignore' })
 const resources = path.join(macos, 'Sources', 'qvac_flutter', 'Resources')
 await mkdir(resources, { recursive: true })
 await writeFile(path.join(resources, 'worker.bundle'), bundle)

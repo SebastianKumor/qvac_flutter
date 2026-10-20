@@ -20,7 +20,10 @@ void main() {
     final qvac = await Qvac.start();
     debugPrint('started in ${watch.elapsedMilliseconds} ms');
     try {
-      final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+      final whisper = await qvac.loadWhisper(
+        (await downloadModel()).path,
+        language: 'fi',
+      );
       debugPrint('loaded in ${watch.elapsedMilliseconds} ms');
       final clip = await rootBundle.load('assets/sample_fi.pcm');
       final text = await whisper.transcribe(clip.buffer.asUint8List());
@@ -32,6 +35,16 @@ void main() {
     }
   }, timeout: const Timeout(Duration(minutes: 10)));
 
+  testWidgets('the app outlives the worker shutdown', (tester) async {
+    // The worker kills its own process if exit takes over 3 s. In the app,
+    // that would be the whole app.
+    final qvac = await Qvac.start();
+    await qvac.close();
+    await Future<void>.delayed(const Duration(seconds: 4));
+    final again = await Qvac.start();
+    await again.close();
+  });
+
   testWidgets('restarts a worker left from a hot restart', (tester) async {
     // Starts a worklet Dart doesn't know about, the way a hot restart leaves one.
     if (desktop) {
@@ -42,7 +55,10 @@ void main() {
     }
     final qvac = await Qvac.start();
     try {
-      final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+      final whisper = await qvac.loadWhisper(
+        (await downloadModel()).path,
+        language: 'fi',
+      );
       final clip = await rootBundle.load('assets/sample_fi.pcm');
       final text = await whisper.transcribe(
         clip.buffer.asUint8List(),
@@ -65,7 +81,10 @@ void main() {
       final qvac = await Qvac.start();
       try {
         expect(await first, 'started');
-        final whisper = await qvac.loadWhisper(modelUrl, language: 'fi');
+        final whisper = await qvac.loadWhisper(
+          (await downloadModel()).path,
+          language: 'fi',
+        );
         final clip = await rootBundle.load('assets/sample_fi.pcm');
         final text = await whisper.transcribe(clip.buffer.asUint8List());
         expect(text.toLowerCase(), contains('kahvia'));

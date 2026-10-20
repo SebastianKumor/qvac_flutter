@@ -13,7 +13,7 @@ import 'rpc/rpc_client.dart';
 
 /// Runs the QVAC worker inside the app on macOS, Linux and Windows.
 class DesktopWorker {
-  DesktopWorker._(this.rpc, this._worklet);
+  DesktopWorker._(this.rpc, this._worklet, this.modelDefaults);
 
   static const _methods = MethodChannel('qvac_flutter/desktop');
 
@@ -25,6 +25,9 @@ class DesktopWorker {
 
   final QvacRpc rpc;
   final DesktopWorklet _worklet;
+
+  /// Added to every model's config.
+  final Map<String, dynamic> modelDefaults;
   bool _closed = false;
 
   static Future<DesktopWorker> start({
@@ -55,23 +58,29 @@ class DesktopWorker {
     if (_getEnv(_envKey) case final left? when left.isNotEmpty) {
       // A worker from before a hot restart. Stop it cleanly, then start a new one.
       _setEnv(_envKey, '');
-      final old = DesktopWorklet.adopt(library: library, handle: left);
+      final old = await DesktopWorklet.adopt(library: library, handle: left);
       await old.listen();
       await _shutdown(_connect(old), old);
     }
     final home = homeDir ?? paths.home;
     await Directory(home).create(recursive: true);
-    final worklet = await DesktopWorklet.start(
-      library: library,
-      bundle: await File(paths.bundle).readAsBytes(),
-      // Same argument shape as QVAC's Expo client: the JSON config must be third.
-      arguments: [
-        'qvac_flutter',
-        'worker.bundle',
-        jsonEncode({'HOME_DIR': home})
-      ],
-    );
-    _setEnv(_envKey, worklet.handle);
+    final DesktopWorklet worklet;
+    try {
+      worklet = await DesktopWorklet.start(
+        library: library,
+        bundle: await File(paths.bundle).readAsBytes(),
+        // Same argument shape as QVAC's Expo client: the JSON config must be third.
+        arguments: [
+          'qvac_flutter',
+          'worker.bundle',
+          jsonEncode({'HOME_DIR': home})
+        ],
+        onStarted: (handle) => _setEnv(_envKey, handle),
+      );
+    } catch (_) {
+      _setEnv(_envKey, '');
+      rethrow;
+    }
     final rpc = _connect(worklet);
     try {
       await rpc.call('heartbeat', const {}).timeout(timeout);
@@ -82,7 +91,10 @@ class DesktopWorker {
       await _shutdown(rpc, worklet);
       rethrow;
     }
-    return DesktopWorker._(rpc, worklet);
+    return DesktopWorker._(rpc, worklet, {
+      // The addon looks for ggml's backends inside the bundle, where they aren't.
+      if (paths.backends case final dir?) 'backendsDir': dir,
+    });
   }
 
   static QvacRpc _connect(DesktopWorklet worklet) =>
@@ -97,8 +109,9 @@ class DesktopWorker {
       // Stop anyway.
     }
     await rpc.close();
-    await worklet.terminate();
+    // Cleared first: a hot restart during terminate must not adopt freed memory.
     _setEnv(_envKey, '');
+    await worklet.terminate();
   }
 
   /// Forgets the running worker without stopping it, like a hot restart does.
@@ -113,7 +126,9 @@ class DesktopWorker {
     _running = false;
   }
 
-  static Future<({String library, String bundle, String home})> _paths() async {
+  static Future<
+          ({String library, String bundle, String home, String? backends})>
+      _paths() async {
     final exe = File(Platform.resolvedExecutable).parent.path;
     if (Platform.isMacOS) {
       final paths = await _methods.invokeMapMethod<String, String>('paths');
@@ -121,6 +136,7 @@ class DesktopWorker {
         library: '$exe/../Frameworks/BareKit.framework/BareKit',
         bundle: paths!['bundle']!,
         home: paths['home']!,
+        backends: null,
       );
     }
     final app = Platform.resolvedExecutable
@@ -134,6 +150,7 @@ class DesktopWorker {
         library: '$exe\\bare-kit.dll',
         bundle: '$exe\\worker.bundle',
         home: '$data\\$app\\qvac',
+        backends: null,
       );
     }
     final env = Platform.environment;
@@ -142,6 +159,7 @@ class DesktopWorker {
       library: '$exe/lib/libbare-kit.so',
       bundle: '$exe/lib/worker.bundle',
       home: '$data/$app/qvac',
+      backends: '$exe/lib/qvac_backends',
     );
   }
 }

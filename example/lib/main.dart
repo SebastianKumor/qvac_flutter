@@ -1,10 +1,31 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qvac_flutter/qvac_flutter.dart';
 
-/// Multilingual, 78 MB. Downloaded by the worker on first load.
-const modelUrl =
-    'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q8_0.bin';
+/// Whisper base, multilingual, 82 MB. Pinned to a commit, so the hash holds.
+final modelUrl = Uri.parse(
+  'https://huggingface.co/ggerganov/whisper.cpp/resolve/'
+  '5359861c739e955e79d9a303bcbc70fb988958b1/ggml-base-q8_0.bin',
+);
+const modelSha256 =
+    'c577b9a86e7e048a0b7eada054f4dd79a56bbfa911fbdacf900ac5b567cbb7d9';
+
+/// Downloads the model once. Later calls check the file and return it.
+Future<File> downloadModel({
+  void Function(DownloadProgress)? onProgress,
+}) async {
+  final dir = await getApplicationCacheDirectory();
+  final download = ModelDownload.start(
+    modelUrl,
+    File('${dir.path}/models/ggml-base-q8_0.bin'),
+    sha256: modelSha256,
+  );
+  if (onProgress != null) download.progress.listen(onProgress, onError: (_) {});
+  return download.done;
+}
 
 void main() => runApp(const MaterialApp(home: Demo()));
 
@@ -20,6 +41,7 @@ class _DemoState extends State<Demo> {
   Whisper? _whisper;
   String _status = 'Not started';
   bool _busy = false;
+  double? _progress;
 
   Future<void> _run(String label, Future<String> Function() step) async {
     setState(() {
@@ -42,7 +64,14 @@ class _DemoState extends State<Demo> {
   }
 
   Future<String> _load() async {
-    _whisper = await _qvac!.loadWhisper(modelUrl, language: 'fi');
+    final model = await downloadModel(
+      onProgress: (p) => setState(() {
+        _progress = p.fraction;
+        _status = 'Downloading ${p.received ~/ 1000000} MB';
+      }),
+    );
+    setState(() => _progress = null);
+    _whisper = await _qvac!.loadWhisper(model.path, language: 'fi');
     return 'Model loaded';
   }
 
@@ -74,6 +103,11 @@ class _DemoState extends State<Demo> {
                 ),
               ),
             const SizedBox(height: 12),
+            if (_progress != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: LinearProgressIndicator(value: _progress),
+              ),
             Text(_status, key: const Key('status')),
           ],
         ),
