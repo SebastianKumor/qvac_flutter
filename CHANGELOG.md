@@ -2,7 +2,7 @@
 
 * `ModelDownload` downloads a model file with progress, a SHA-256 check, retries, resume after a dropped connection, and cancel. Pass the file to `loadWhisper`.
 * macOS (Apple Silicon, macOS 13+), Linux (x64, arm64) and Windows (x64). `Qvac.start` runs BareKit in the app through FFI. Tested on macOS and Linux arm64; Windows and Linux x64 are not tested yet.
-* README: download models with `ModelDownload` and load them by path. A model loaded by URL fails to load again offline, because the worker's offline check expects a GGUF header.
+* Fixed: a Whisper model loaded by URL failed to load again offline with "Cannot resume partial download". QVAC SDK 0.21.0 only trusts a cached file offline if it has a GGUF header, and Whisper models don't. The worker now marks a finished download and trusts the mark.
 * The desktop binaries come from their own GitHub release, `desktop-1`.
 * New dependencies: `crypto` and `ffi`.
 

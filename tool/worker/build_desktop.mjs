@@ -8,6 +8,7 @@ import path from 'node:path'
 import link from 'bare-link'
 import { bundleSdk } from '@qvac/sdk/commands'
 import { writePackageSwift } from './package_swift.mjs'
+import { applyPatches } from './patches.mjs'
 
 const root = import.meta.dirname
 const plugin = path.resolve(root, '../..')
@@ -20,6 +21,7 @@ const targets = {
   'windows-x64': { host: 'win32-x64', barekit: 'win32/x64/bare-kit.dll' }
 }
 
+await applyPatches()
 const result = await bundleSdk({
   projectRoot: root,
   hosts: Object.values(targets).map((t) => t.host),

@@ -39,11 +39,8 @@ final text = await whisper.transcribe(pcm);
 await qvac.close();
 ```
 
-`loadWhisper` also takes an HTTPS URL and lets the worker download the model,
-but with no progress. Worse, in QVAC SDK 0.21.0 a model loaded that way only
-loads again while the device is online: offline, the worker checks the cached
-file for a GGUF header, and whisper.cpp models don't have one. Download with
-`ModelDownload` and pass the path.
+`loadWhisper` also takes an HTTPS URL and lets the worker download and cache
+the model, but with no progress and no way to cancel.
 
 Start QVAC once per app. A second `Qvac.start` throws until you `close` the
 first. After a hot restart, `Qvac.start` stops the old worker and starts a new

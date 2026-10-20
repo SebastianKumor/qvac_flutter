@@ -64,172 +64,172 @@ let package = Package(
         .binaryTarget(
             name: "BareKit",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-BareKit.xcframework.zip",
-            checksum: "fc3a9fd739fd12a721f0c40bc66ac5dc74f4eae729e57f4b1a411de2e862f89b"
+            checksum: "0f9c96152c3b102269fdd9c5e173832845210b0f8163d5e3158d0fd8147421de"
         ),
         .binaryTarget(
             name: "bare_abort_2_0_13",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-abort.2.0.13.xcframework.zip",
-            checksum: "e6d6279d5ffab7a81e2520e9ac705920549198cabf4fade06907933fcea15fd1"
+            checksum: "e09b70871bfd6f384eef307033e2f59121dbf56809156b11363b69f1d18d6888"
         ),
         .binaryTarget(
             name: "bare_buffer_3_7_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-buffer.3.7.1.xcframework.zip",
-            checksum: "0fdf0aab8d430ad4817c51302a0b3d2907a5fd33a3525d56a1bff0eea94f9b74"
+            checksum: "9d0d4ec3d4432210953836fb4191873bffe68f942c089261e1e691c2ed71ea37"
         ),
         .binaryTarget(
             name: "bare_cpu_info_0_1_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-cpu-info.0.1.1.xcframework.zip",
-            checksum: "de0cbdfe35135e82217867eb1f09023c378184f5ca07de274b80f30cbb9f5e77"
+            checksum: "66be5f858db0ad6b1cda7fd5fb3df4d090fd0e62bbd5dd8f6c980da4c5934cef"
         ),
         .binaryTarget(
             name: "bare_crypto_1_15_4",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-crypto.1.15.4.xcframework.zip",
-            checksum: "d5956c2e70bd6206642f9ad55fc7da32226d58fd5f1f5454c42895043d580a1f"
+            checksum: "d72d8cdd983d6ef793005ac61220927a071f3a09f1ee4bb7731f2f818cff24f5"
         ),
         .binaryTarget(
             name: "bare_dns_2_3_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-dns.2.3.0.xcframework.zip",
-            checksum: "959dd4dfab3186523ee595b70b8aa210831264a281c35d4a65f88377de2ec76b"
+            checksum: "eeb0e6213cc0cb62a9455e24355b35f81a9a1708e03ec98f19b623d329c21055"
         ),
         .binaryTarget(
             name: "bare_fs_4_8_4",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-fs.4.8.4.xcframework.zip",
-            checksum: "ca1aca35ed44effc2839055680bec78baeb7df8ad21159c27d2d7b4a6fc2990b"
+            checksum: "03246d7ec888bfb22e9284066c81fd71d2e592b292d6f542fc48c62486658a36"
         ),
         .binaryTarget(
             name: "bare_gpu_info_0_1_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-gpu-info.0.1.1.xcframework.zip",
-            checksum: "02c30abb06908d1b2bb5acd45f583f3389526d1c6d9032501bd40f8eb6b9f5b5"
+            checksum: "3b55f67353da736ca7911596c24c705e56fa77ebf82eca57d64d247bae41e533"
         ),
         .binaryTarget(
             name: "bare_hrtime_2_1_2",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-hrtime.2.1.2.xcframework.zip",
-            checksum: "970a8c6cb6454a048a768d90ec47a42a0f52350fea94f126d68d16c59911c285"
+            checksum: "8ef7b339c503b9d3ae4029dfe0ab68ba1d8de49282370cd8e65cfc29fd4cd544"
         ),
         .binaryTarget(
             name: "bare_inspect_3_1_10",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-inspect.3.1.10.xcframework.zip",
-            checksum: "1384ba90024448ffd14e87e82bc259e5039c277c005bbc1b9ad2282ef0f1bb5e"
+            checksum: "1581d42d5169ee981dada3e35319a3e541846abfc75322d1cb51277ddc301153"
         ),
         .binaryTarget(
             name: "bare_os_3_9_3",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-os.3.9.3.xcframework.zip",
-            checksum: "3df67cb9c19afa57e4df5cb3f66172509255a1ec6329aa87811b822cab14abfa"
+            checksum: "b72f6029df98174047620738d3a8ad53a1a728df7e1c89aef999fd8a65c673ed"
         ),
         .binaryTarget(
             name: "bare_path_3_1_2",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-path.3.1.2.xcframework.zip",
-            checksum: "be45c39aa7718ecbeb562256f0de77a6520c449407d2c8104a50ac49c31d7011"
+            checksum: "6448923fad803533d3b538ee0c76783b96f3f6778e3db77f5447e1b03979ae6b"
         ),
         .binaryTarget(
             name: "bare_performance_2_1_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-performance.2.1.1.xcframework.zip",
-            checksum: "9ac1a77f830b261aac48e9e722ac4f9d87287e04eb209f471a968d5ea0ed8b13"
+            checksum: "2d3980fe07ad88e4d6d3047276a3fe2058c40349370bf9daa3aef79c55e78663"
         ),
         .binaryTarget(
             name: "bare_pipe_4_3_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-pipe.4.3.1.xcframework.zip",
-            checksum: "c69602850662641b6d4194588e07e88b8ccb05f566766012fca406fd3924a1c4"
+            checksum: "6bc7345f0d8413d0bdeeb282d2ae10a535f4e718db642c586d9911a14f2b8d87"
         ),
         .binaryTarget(
             name: "bare_posix_1_0_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-posix.1.0.1.xcframework.zip",
-            checksum: "5855273dc2645d4aea1f0817c496bbda888f04d713e62c70040b7cedea48beea"
+            checksum: "839b8524fe59a332933fb56beadd0695277ef244844a6b20a5945abdbb4132ba"
         ),
         .binaryTarget(
             name: "bare_signals_4_2_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-signals.4.2.0.xcframework.zip",
-            checksum: "da001acea033d11713fbd90c834e213fda78c1b8f151411f41c79a441f49e543"
+            checksum: "2a46b857f473721ca1089400c6ab4f8d8e81e952a2ff6b5a2e380d35c6e5b043"
         ),
         .binaryTarget(
             name: "bare_signals_5_0_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-signals.5.0.0.xcframework.zip",
-            checksum: "06100183a47f6f40d3db70a4bc11dcc5a1412d5ec9112b49deb4df74e49bfdfe"
+            checksum: "70e4beca91cf3d54fabf419eeb8be0f14816d91f13257f38262e6b519a068eab"
         ),
         .binaryTarget(
             name: "bare_stdio_1_0_3",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-stdio.1.0.3.xcframework.zip",
-            checksum: "48e47daf8559d61d641f25dd1dad0f7f3da974d643c1cc4009d8ae556b8b076e"
+            checksum: "63c7351f918b851b6f7d8277f1cf3227e991984e74f9f85d37340d68f4384de7"
         ),
         .binaryTarget(
             name: "bare_structured_clone_2_0_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-structured-clone.2.0.1.xcframework.zip",
-            checksum: "3bad42696f27f9cceaecb9c81582a8f3860b7b6c6f4749eb469cf8164f3f8b7c"
+            checksum: "770462fa014cb9d305a4972f61fde4496c3b8c2beef3dedb220f22ef9ae14727"
         ),
         .binaryTarget(
             name: "bare_subprocess_6_2_2",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-subprocess.6.2.2.xcframework.zip",
-            checksum: "569f7c3d2c4cca0abf53b63f0c5136699a48487e0b09a7a870788b4fa3b61f4d"
+            checksum: "fa59bbfbf6eabe89298c0c83637aa27a7a9561115e5936ed66d6fbe9083e5dc2"
         ),
         .binaryTarget(
             name: "bare_tcp_2_6_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-tcp.2.6.1.xcframework.zip",
-            checksum: "e6301f7503d14ab5e7b58d9831129969c43c6464f4a62ba8a20bc10906fcdd63"
+            checksum: "bcf782b7cfef4c99176ba3825e248659acadae73059f10450056f1dee6be40b7"
         ),
         .binaryTarget(
             name: "bare_tls_3_1_11",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-tls.3.1.11.xcframework.zip",
-            checksum: "c4dfc3263c65106944f694588fb46ec1353747e2a159a0830ae679a81ca3d0b8"
+            checksum: "be730cb3dbd58509ecfb67d1a732b8424cfd42088f886a4b42792bfd825d2ab7"
         ),
         .binaryTarget(
             name: "bare_tty_5_2_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-tty.5.2.1.xcframework.zip",
-            checksum: "f2390eea5e0589def231740039a0809ed54d94eeb62bb6069975d2b5f5eb6436"
+            checksum: "5981204e7f424b6a7852c0c36cebcffe69c928a4086044fea86aca1779add3b5"
         ),
         .binaryTarget(
             name: "bare_type_1_4_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-type.1.4.0.xcframework.zip",
-            checksum: "c1e65caf4618dd95b4322835511e8d8a1490ff98ca24d0e99f64136a50995d06"
+            checksum: "7440083d106d307c753e70aac7606baf8095b0d33379bd5727854ea567b8dc87"
         ),
         .binaryTarget(
             name: "bare_url_2_5_5",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-url.2.5.5.xcframework.zip",
-            checksum: "983ba7173e5240bcb1143303cb149fe7836f9098974c2c7d7240b1981694db82"
+            checksum: "19fef23104c16844ba893f80f7ffc51ce49f8dc339e4a2a195c2f6f1a9f82bcd"
         ),
         .binaryTarget(
             name: "bare_zlib_1_4_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-bare-zlib.1.4.1.xcframework.zip",
-            checksum: "92bd536f01303dfb304d9dcc8dce8f153cb6e169bad556875a29915961938347"
+            checksum: "255689e2a1e6c5e746744e93b5d3cbb24b51136453f12eea63c33561b9531e77"
         ),
         .binaryTarget(
             name: "fs_native_extensions_1_5_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-fs-native-extensions.1.5.1.xcframework.zip",
-            checksum: "24158960b541b2d59210b6488a42d881ddf23fb06959870074cadc51a342b00a"
+            checksum: "dfe34c21b803d5033f29bbfe2dbae1c9d66fe770cb09dfc7610c609fd9279e7e"
         ),
         .binaryTarget(
             name: "quickbit_native_2_4_9",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-quickbit-native.2.4.9.xcframework.zip",
-            checksum: "ef0ccb7b10c9cc97ab334f1722ed18e487e744782c5d7588fcfb99b5e9f1b53a"
+            checksum: "4689cde31318de3e61652026c287882d4226c17e0182fc4ce5ee55c2f8dbc16f"
         ),
         .binaryTarget(
             name: "qvac__asr_ggml_0_7_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-qvac__asr-ggml.0.7.0.xcframework.zip",
-            checksum: "b208e2c3a2a9669b54b1ebb942f729a41f4f4f900c97d2fc333a011b9a9373d6"
+            checksum: "831d52f2524bfbbcb6877496ac7fd6c41a450a8055bdfe92c9b4875814c12ab4"
         ),
         .binaryTarget(
             name: "rabin_native_2_0_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-rabin-native.2.0.0.xcframework.zip",
-            checksum: "7734c8cd97cc2e78190741ace831d0f0e6ab909e9e0a8bf8618d2a1f07c473be"
+            checksum: "d12ef62531adbd601c948630bb03ad4a94f7513b9a30511bc293604db28be3eb"
         ),
         .binaryTarget(
             name: "rocksdb_native_3_19_1",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-rocksdb-native.3.19.1.xcframework.zip",
-            checksum: "cd86ac14f5e7847729ba9fff89d38c05857441d67b5c0dbeb72fe31b89eaf115"
+            checksum: "d4b100ec98fc97382e7b7249f288f53339160130f77368adebb1cc2a37f6bb5b"
         ),
         .binaryTarget(
             name: "simdle_native_1_3_9",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-simdle-native.1.3.9.xcframework.zip",
-            checksum: "fbc3b2c387be955dd9297cafb688001b943e3f0fa4fbc1aac672edefe03d2826"
+            checksum: "43cb63129fbb3052eb386d54e2d9d79009b6cf54820f73d7ea03d6c34e9a7ccc"
         ),
         .binaryTarget(
             name: "sodium_native_5_1_0",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-sodium-native.5.1.0.xcframework.zip",
-            checksum: "78d27f085ef4996864ff9bb95becf29a6e2b05f3d4b2c0f5e91254d7d82ed0ce"
+            checksum: "21d03c3746dbcf2b54bd0d8f6b0e9558aba620b4d8bbc92defe7fdbc1172085f"
         ),
         .binaryTarget(
             name: "udx_native_1_21_3",
             url: "https://github.com/SebastianKumor/qvac_flutter/releases/download/desktop-1/macos-udx-native.1.21.3.xcframework.zip",
-            checksum: "0658c5d974dfd3d2c2cc05d238e496cbe366bf701ed93bb062c88c9e9014c606"
+            checksum: "37f62f92457524da1a7d3156b9d7573e48f81b438436b08c4fcda71899b258ae"
         ),
     ]
 )

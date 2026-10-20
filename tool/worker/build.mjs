@@ -8,6 +8,7 @@ import path from 'node:path'
 import link from 'bare-link'
 import { bundleSdk } from '@qvac/sdk/commands'
 import { writePackageSwift } from './package_swift.mjs'
+import { applyPatches } from './patches.mjs'
 import { licenseTexts } from './licenses.mjs'
 
 const root = import.meta.dirname
@@ -22,6 +23,8 @@ const barekit = {
   sha256: 'fc68740347c8532ba49d45bf61fae9ca1f1040dc7d6c99f2f92dc30c40e84e46'
 }
 const onMac = process.platform === 'darwin'
+
+await applyPatches()
 
 // 1. Bundle the worker with only the plugins in qvac.config.json.
 const result = await bundleSdk({

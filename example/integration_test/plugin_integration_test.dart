@@ -35,6 +35,33 @@ void main() {
     }
   }, timeout: const Timeout(Duration(minutes: 10)));
 
+  testWidgets('a model loaded by URL loads again offline', (tester) async {
+    final model = await downloadModel();
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    server.listen((request) async {
+      request.response.contentLength = await model.length();
+      if (request.method != 'HEAD') {
+        await request.response.addStream(model.openRead());
+      }
+      await request.response.close();
+    });
+    // A new port each run, so the worker's cache starts empty.
+    final url = 'http://127.0.0.1:${server.port}/ggml-base-q8_0.bin';
+    final qvac = await Qvac.start();
+    try {
+      await (await qvac.loadWhisper(url, language: 'fi')).unload();
+      await server.close(force: true);
+      final whisper = await qvac.loadWhisper(url, language: 'fi');
+      final clip = await rootBundle.load('assets/sample_fi.pcm');
+      final text = await whisper.transcribe(clip.buffer.asUint8List());
+      expect(text.toLowerCase(), contains('kahvia'));
+      await whisper.unload();
+    } finally {
+      await server.close(force: true);
+      await qvac.close();
+    }
+  }, timeout: const Timeout(Duration(minutes: 10)));
+
   testWidgets('the app outlives the worker shutdown', (tester) async {
     // The worker kills its own process if exit takes over 3 s. In the app,
     // that would be the whole app.
